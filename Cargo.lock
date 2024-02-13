@@ -1383,6 +1383,8 @@ dependencies = [
  "actix-web-actors",
  "challonge",
  "chrono",
+ "serde",
+ "serde_json",
 ]
 
 [[package]]

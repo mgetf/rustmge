@@ -70,37 +70,10 @@
       <input type="submit" id="send" />
     </form>
 
-    <hr />
 
-    <section>
-      <h2>Commands</h2>
-      <table style="border-spacing: 0.5em">
-        <tr>
-          <td>
-            <code>/list</code>
-          </td>
-          <td>list all available rooms</td>
-        </tr>
-        <tr>
-          <td>
-            <code>/join name</code>
-          </td>
-          <td>join room, if room does not exist, create new one</td>
-        </tr>
-        <tr>
-          <td>
-            <code>/name name</code>
-          </td>
-          <td>set session name</td>
-        </tr>
-        <tr>
-          <td>
-            <code>some message</code>
-          </td>
-          <td>just string, send message to all peers in same room</td>
-        </tr>
-      </table>
-    </section>
+    <hr />
+    <button id="debug1">connect string</button>
+
 
     <script>
       const $status = document.querySelector('#status')
@@ -108,6 +81,7 @@
       const $log = document.querySelector('#log')
       const $form = document.querySelector('#chatform')
       const $input = document.querySelector('#text')
+      const $debug1 = document.querySelector('#debug1')
 
       /** @type {WebSocket | null} */
       var socket = null
@@ -123,7 +97,7 @@
         const { location } = window
 
         const proto = location.protocol.startsWith('https') ? 'wss' : 'ws'
-        const wsUri = `${proto}://${location.host}/ws`
+        const wsUri = `${proto}://${location.host}/tf2serverep`
 
         log('Connecting...')
         socket = new WebSocket(wsUri)
@@ -189,6 +163,12 @@
 
         $input.value = ''
         $input.focus()
+      })
+
+      $debug1.addEventListener('click', () => {
+        const text =JSON.stringify({"type": "ServerHello", "payload": {"apiKey": "", "serverNum": "1", "serverHost": "", "serverPort": "27015", "stvPort": ""}}) 
+        log('sent ' + text)
+        socket.send(text)
       })
 
       updateConnectionStatus()
