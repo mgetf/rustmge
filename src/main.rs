@@ -4,9 +4,10 @@ use actix_web::{get, post, web, App, Error, HttpRequest, HttpResponse, HttpServe
 use actix_web_actors::ws;
 use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Deserialize, Serialize)]
 #[serde(tag = "type", content = "payload")]
 enum MessagePayload {
+    // receiving
     ServerHello {
         apiKey: String,
         serverNum: String,
@@ -16,6 +17,16 @@ enum MessagePayload {
     },
     // from admin panel, start a match between two players
     AdminInstigateMatch {},
+
+
+
+
+    // sending 
+    MatchDetails {
+        arenaId: String,
+        p1Id: String,
+        p2Id: String,
+    }
 }
 
 struct AppState {
@@ -52,7 +63,13 @@ impl StreamHandler<Result<ws::Message, ws::ProtocolError>> for ServerWs {
                     } => {
                         self.servers.push(Server { apiKey: apiKey });
                     }
-                    MessagePayload::AdminInstigateMatch {} => println!("admin instigated match"),
+                    MessagePayload::AdminInstigateMatch {} => {
+                        let m : MessagePayload = MessagePayload::MatchDetails {arenaId: String::from("1"), 
+                                                                                p1Id: String::from("2"), 
+                                                                                p2Id: String::from("3")};
+                        let p = serde_json::to_string(m).unwrap();
+                        ctx.text(p);
+                    }
                 }
 
                 //ctx.text(text)
