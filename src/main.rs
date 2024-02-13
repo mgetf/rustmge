@@ -80,11 +80,13 @@ impl StreamHandler<Result<ws::Message, ws::ProtocolError>> for ServerWs {
                         stvPort,
                     } => {
                         if apiKey == "admin" {
+                            println!("admin registered");
                             self.admin = Some(Server {
                                 apiKey: apiKey,
                                 address: ctx.address(),
                             });
                         } else {
+                            println!("other server registered");
                             self.servers.push(Server {
                                 apiKey: apiKey,
                                 address: ctx.address(),
