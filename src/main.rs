@@ -30,6 +30,7 @@ struct AppState {
     app_name: String,
 }
 
+#[derive(Debug)]
 struct Server {
     apiKey: String,
     address: actix::Addr<ServerWs>,
@@ -95,14 +96,17 @@ impl StreamHandler<Result<ws::Message, ws::ProtocolError>> for ServerWs {
                     }
                     MessagePayload::AdminInstigateMatch {} => {
                         assert!(self.admin.as_mut().unwrap().address == ctx.address());
+                        println!("received admininstigate match");
 
                         for server in &self.servers {
+                            println!("ummm here");
                             let m: MessagePayload = MessagePayload::MatchDetails {
                                 arenaId: String::from("1"),
                                 p1Id: String::from("2"),
                                 p2Id: String::from("3"),
                             };
                             let p = serde_json::to_string(&m).unwrap();
+                            println!("sending msesage {} to server {:?}", p, server);
                             server.address.do_send(ForwardMessage { message: p })
                         }
                     }
