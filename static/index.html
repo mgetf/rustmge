@@ -168,7 +168,7 @@
       })
 
       $debug1.addEventListener('click', () => {
-        const text =JSON.stringify({"type": "ServerHello", "payload": {"apiKey": "", "serverNum": "1", "serverHost": "", "serverPort": "27015", "stvPort": ""}}) 
+        const text =JSON.stringify({"type": "ServerHello", "payload": {"apiKey": "admin", "serverNum": "1", "serverHost": "", "serverPort": "27015", "stvPort": ""}}) 
         log('sent ' + text)
         socket.send(text)
       })
