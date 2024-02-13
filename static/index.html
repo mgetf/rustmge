@@ -74,6 +74,7 @@
     <hr />
     <button id="debug1">simulate connect</button>
     <button id="debug2">AdminInstigateMatch</button>
+    <button id="debug3">UsersInServer</button>
 
 
     <script>
@@ -84,6 +85,7 @@
       const $input = document.querySelector('#text')
       const $debug1 = document.querySelector('#debug1')
       const $debug2 = document.querySelector('#debug2')
+      const $debug3 = document.querySelector('#debug3')
 
       /** @type {WebSocket | null} */
       var socket = null
@@ -175,6 +177,13 @@
 
       $debug2.addEventListener('click', () => {
         const text =JSON.stringify({"type": "AdminInstigateMatch", 
+                                    "payload": {}}) 
+        log('sent ' + text)
+        socket.send(text)
+      })
+
+      $debug2.addEventListener('click', () => {
+        const text =JSON.stringify({"type": "UsersInServer", 
                                     "payload": {}}) 
         log('sent ' + text)
         socket.send(text)
