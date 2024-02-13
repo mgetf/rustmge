@@ -4,4 +4,5 @@ eventually convert into web service with interface
 {"type": "ServerHello", "payload": {"apiKey": "", "serverNum": "1", "serverHost": "", "serverPort": "27015", "stvPort": ""}}
 {"type": "MatchCancel", "payload": {"delinquents": ["1", "2"], "arrived": "", "arena": 1}}
 {"type": "MatchResults", "payload": {"winner": "76561198041183975", "loser": "76561198306912450", "finished": true}}
+{"type": "UsersInServer", "payload": {"players": [{"steamId": "STEAM_ID_STOP_IGNORING_RETVALS", "name": "awesom"}]}}
 
