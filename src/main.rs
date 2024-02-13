@@ -18,15 +18,12 @@ enum MessagePayload {
     // from admin panel, start a match between two players
     AdminInstigateMatch {},
 
-
-
-
-    // sending 
+    // sending
     MatchDetails {
         arenaId: String,
         p1Id: String,
         p2Id: String,
-    }
+    },
 }
 
 struct AppState {
@@ -64,11 +61,20 @@ impl StreamHandler<Result<ws::Message, ws::ProtocolError>> for ServerWs {
                         self.servers.push(Server { apiKey: apiKey });
                     }
                     MessagePayload::AdminInstigateMatch {} => {
-                        let m : MessagePayload = MessagePayload::MatchDetails {arenaId: String::from("1"), 
-                                                                                p1Id: String::from("2"), 
-                                                                                p2Id: String::from("3")};
-                        let p = serde_json::to_string(m).unwrap();
+                        let m: MessagePayload = MessagePayload::MatchDetails {
+                            arenaId: String::from("1"),
+                            p1Id: String::from("2"),
+                            p2Id: String::from("3"),
+                        };
+                        let p = serde_json::to_string(&m).unwrap();
                         ctx.text(p);
+                    }
+                    MessagePayload::MatchDetails {
+                        arenaId,
+                        p1Id,
+                        p2Id,
+                    } => {
+                        todo!();
                     }
                 }
 
@@ -81,9 +87,7 @@ impl StreamHandler<Result<ws::Message, ws::ProtocolError>> for ServerWs {
 }
 
 async fn server_route(req: HttpRequest, stream: web::Payload) -> Result<HttpResponse, Error> {
-    let resp = ws::start(ServerWs{
-        servers: vec![]
-    }, &req, stream);
+    let resp = ws::start(ServerWs { servers: vec![] }, &req, stream);
     println!("server!!! {:?}", resp);
     resp
 }
