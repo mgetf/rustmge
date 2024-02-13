@@ -182,8 +182,8 @@
         socket.send(text)
       })
 
-      $debug2.addEventListener('click', () => {
-        const text =JSON.stringify({"type": "UsersInServer", 
+      $debug3.addEventListener('click', () => {
+        const text =JSON.stringify({"type": "UsersInServerRequest", 
                                     "payload": {}}) 
         log('sent ' + text)
         socket.send(text)

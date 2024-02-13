@@ -62,6 +62,14 @@ impl Handler<ForwardMessage> for Tournament {
             } => {
                 todo!("tournametn manager should not receive this")
             }
+            MessagePayload::UsersInServerRequest {} => {
+                for server in self.servers.iter() {
+                    server.do_send(ForwardMessage {
+                        message: MessagePayload::UsersInServerRequest {},
+                        from: msg.from.clone(),
+                    });
+                }
+            }
         }
     }
 }

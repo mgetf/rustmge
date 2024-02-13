@@ -25,6 +25,7 @@ enum MessagePayload {
         p1Id: String,
         p2Id: String,
     },
+    UsersInServerRequest {},
 }
 
 struct AppState {
@@ -86,8 +87,12 @@ impl StreamHandler<Result<ws::Message, ws::ProtocolError>> for ServerWs {
     }
 }
 
-async fn server_route(req: HttpRequest, stream: web::Payload) -> Result<HttpResponse, Error> {
-    let t: &actix::Addr<server::Tournament> = &req.app_data::<AppState>().unwrap().tournment;
+async fn server_route(
+    req: HttpRequest,
+    data: web::Data<AppState>,
+    stream: web::Payload,
+) -> Result<HttpResponse, Error> {
+    let t: &actix::Addr<server::Tournament> = &data.tournment;
 
     let resp = ws::start(ServerWs { addr: t.clone() }, &req, stream);
     println!("server!!! {:?}", resp);
