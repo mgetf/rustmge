@@ -2,3 +2,5 @@ right now work on challonge api, and server controlling api
 eventually convert into web service with interface
 
 {"type": "ServerHello", "payload": {"apiKey": "", "serverNum": "1", "serverHost": "", "serverPort": "27015", "stvPort": ""}}
+{"type": "MatchCancel", "payload": {"delinquents": ["1", "2"], "arrived": "", "arena": 1}}
+
