@@ -14,13 +14,21 @@ enum MessagePayload {
         serverPort: String,
         stvPort: String,
     },
+    // from admin panel, start a match between two players
+    AdminInstigateMatch {},
 }
 
 struct AppState {
     app_name: String,
 }
 
-struct ServerWs;
+struct Server {
+    apiKey: String,
+}
+
+struct ServerWs {
+    servers: Vec<Server>,
+}
 impl Actor for ServerWs {
     type Context = ws::WebsocketContext<Self>;
 }
@@ -33,7 +41,19 @@ impl StreamHandler<Result<ws::Message, ws::ProtocolError>> for ServerWs {
                 println!("Text received: {}", text);
                 let parsed: MessagePayload =
                     serde_json::from_str(&text).expect("unrecognized json");
-                println!("parsed: {:?}", parsed);
+
+                match parsed {
+                    MessagePayload::ServerHello {
+                        apiKey,
+                        serverNum,
+                        serverHost,
+                        serverPort,
+                        stvPort,
+                    } => {
+                        self.servers.push(Server { apiKey: apiKey });
+                    }
+                    MessagePayload::AdminInstigateMatch {} => println!("admin instigated match"),
+                }
 
                 //ctx.text(text)
             }

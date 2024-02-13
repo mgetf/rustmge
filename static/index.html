@@ -72,7 +72,8 @@
 
 
     <hr />
-    <button id="debug1">connect string</button>
+    <button id="debug1">simulate connect</button>
+    <button id="debug2">AdminInstigateMatch</button>
 
 
     <script>
@@ -171,6 +172,12 @@
         socket.send(text)
       })
 
+      $debug2.addEventListener('click', () => {
+        const text =JSON.stringify({"type": "AdminInstigateMatch", 
+                                    "payload": {}}) 
+        log('sent ' + text)
+        socket.send(text)
+      })
       updateConnectionStatus()
 
     </script>
