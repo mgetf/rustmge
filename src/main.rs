@@ -32,6 +32,7 @@ struct AppState {
     tournment: actix::Addr<server::Tournament>,
 }
 
+#[derive(Debug)]
 struct Server {
     apiKey: String,
     address: actix::Addr<ServerWs>,
