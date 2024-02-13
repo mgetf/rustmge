@@ -64,7 +64,9 @@ impl StreamHandler<Result<ws::Message, ws::ProtocolError>> for ServerWs {
 }
 
 async fn server_route(req: HttpRequest, stream: web::Payload) -> Result<HttpResponse, Error> {
-    let resp = ws::start(ServerWs, &req, stream);
+    let resp = ws::start(ServerWs{
+        servers: vec![]
+    }, &req, stream);
     println!("server!!! {:?}", resp);
     resp
 }
