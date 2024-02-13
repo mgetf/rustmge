@@ -5,6 +5,7 @@ use actix_web_actors::ws::Message;
 pub struct Tournament {
     admin: Option<actix::Addr<ServerWs>>,
     servers: Vec<actix::Addr<ServerWs>>,
+    players: Vec<crate::Player>,
     tc: bool,
 }
 
@@ -14,6 +15,7 @@ impl Tournament {
             admin: None,
             servers: vec![],
             tc: false,
+            players: vec![],
         }
     }
 }
@@ -69,6 +71,24 @@ impl Handler<ForwardMessage> for Tournament {
                         from: msg.from.clone(),
                     });
                 }
+            }
+            MessagePayload::MatchCanecl {
+                delinquents,
+                arrived,
+                arena,
+            } => {
+                todo!()
+            }
+            MessagePayload::MatchResults {
+                winner,
+                loser,
+                finished,
+            } => {
+                todo!()
+            }
+            MessagePayload::UsersInServer { players } => {
+                println!("recieved players {:?}", players);
+                self.players = players;
             }
         }
     }

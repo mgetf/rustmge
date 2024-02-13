@@ -6,6 +6,12 @@ use serde::{Deserialize, Serialize};
 mod server;
 
 #[derive(Debug, Deserialize, Serialize)]
+struct Player {
+    steamId: String,
+    name: String,
+}
+
+#[derive(Debug, Deserialize, Serialize)]
 #[serde(tag = "type", content = "payload")]
 enum MessagePayload {
     // receiving
@@ -26,6 +32,19 @@ enum MessagePayload {
         p2Id: String,
     },
     UsersInServerRequest {},
+    MatchResults {
+        winner: String,
+        loser: String,
+        finished: bool,
+    },
+    MatchCanecl {
+        delinquents: Vec<String>,
+        arrived: String,
+        arena: i32,
+    },
+    UsersInServer {
+        players: Vec<Player>,
+    },
 }
 
 struct AppState {
