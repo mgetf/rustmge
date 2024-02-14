@@ -31,13 +31,7 @@ impl Handler<ForwardMessage> for Tournament {
 
     fn handle(&mut self, msg: ForwardMessage, _ctx: &mut Self::Context) {
         match msg.message {
-            MessagePayload::ServerHello {
-                apiKey,
-                serverNum,
-                serverHost,
-                serverPort,
-                stvPort,
-            } => {
+            MessagePayload::ServerHello { apiKey, .. } => {
                 if apiKey == "admin" {
                     self.admin = Some(msg.from);
                 } else {
@@ -57,11 +51,7 @@ impl Handler<ForwardMessage> for Tournament {
                     });
                 }
             }
-            MessagePayload::MatchDetails {
-                arenaId,
-                p1Id,
-                p2Id,
-            } => {
+            MessagePayload::MatchDetails { .. } => {
                 todo!("tournametn manager should not receive this")
             }
             MessagePayload::UsersInServerRequest {} => {
@@ -72,7 +62,7 @@ impl Handler<ForwardMessage> for Tournament {
                     });
                 }
             }
-            MessagePayload::MatchCanecl {
+            MessagePayload::MatchCancel {
                 delinquents,
                 arrived,
                 arena,

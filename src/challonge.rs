@@ -45,9 +45,9 @@ pub fn add_participant(
     steamid: String,
 ) -> challonge::Participant {
     let pc = ParticipantCreate {
-        name: Some(name.clone()),
+        name: Some(name),
         challonge_username: None,
-        email: (name.clone() + "@mge.tf").to_owned(),
+        email: name.clone() + "@mge.tf",
         seed: 1,
         misc: steamid,
     };
@@ -71,15 +71,16 @@ pub fn pending_matches(
         .map(|p| (p.id.0, (p.name.clone(), p.misc.clone())))
         .collect::<std::collections::HashMap<_, _>>();
 
-    let mut pending = Vec::new();
-    for matc in index.0.iter() {
-        pending.push((
-            pid_to_name.get(&matc.player1.id.0).unwrap().clone(),
-            pid_to_name.get(&matc.player2.id.0).unwrap().clone(),
-        ));
-    }
-
-    return pending;
+    index
+        .0
+        .iter()
+        .map(|matc| {
+            (
+                pid_to_name.get(&matc.player1.id.0).unwrap().clone(),
+                pid_to_name.get(&matc.player2.id.0).unwrap().clone(),
+            )
+        })
+        .collect()
 }
 
 pub fn main() {
