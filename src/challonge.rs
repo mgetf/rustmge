@@ -8,7 +8,7 @@ use challonge::Challonge;
 use challonge::ParticipantCreate;
 use chrono::*;
 
-const SUBDOMAIN: &str = "89c2a59aadab1761b8e29117";
+pub const SUBDOMAIN: &str = "89c2a59aadab1761b8e29117";
 
 pub fn create_tournament(c: &Challonge, url: String, title: String) -> challonge::Tournament {
     let tc = TournamentCreate {
@@ -45,7 +45,7 @@ pub fn add_participant(
     steamid: String,
 ) -> challonge::Participant {
     let pc = ParticipantCreate {
-        name: Some(name),
+        name: Some(name.clone()),
         challonge_username: None,
         email: name.clone() + "@mge.tf",
         seed: 1,

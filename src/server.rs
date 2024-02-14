@@ -1,21 +1,38 @@
-use crate::{ForwardMessage, ServerWs};
+use crate::{challonge::SUBDOMAIN, ForwardMessage, ServerWs};
 use actix::prelude::*;
 use actix_web_actors::ws::Message;
+
+pub struct MatchDetails {
+    arenaId: String,
+    p1Id: String,
+    p2Id: String,
+}
 
 pub struct Tournament {
     admin: Option<actix::Addr<ServerWs>>,
     servers: Vec<actix::Addr<ServerWs>>,
     players: Vec<crate::Player>,
-    tc: bool,
+    matches: Vec<MatchDetails>,
+    c: Challonge,
+    tc: challonge::Tournament,
 }
 
+use challonge::Challonge;
+
 impl Tournament {
-    pub fn new() -> Self {
+    pub fn new(c: Challonge) -> Self {
+        let tid = challonge::TournamentId::Url(SUBDOMAIN.to_string(), "mge1".to_string());
+        let tc = c
+            .get_tournament(&tid, &challonge::TournamentIncludes::All)
+            .unwrap();
+
         Tournament {
             admin: None,
             servers: vec![],
-            tc: false,
+            c: c,
+            tc: tc,
             players: vec![],
+            matches: vec![],
         }
     }
 }

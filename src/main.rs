@@ -3,6 +3,7 @@ use actix_files::{Files, NamedFile};
 use actix_web::{get, post, web, App, Error, HttpRequest, HttpResponse, HttpServer, Responder};
 use actix_web_actors::ws;
 use serde::{Deserialize, Serialize};
+mod challonge;
 mod server;
 
 #[derive(Debug, Deserialize, Serialize)]
@@ -122,9 +123,12 @@ async fn index() -> impl Responder {
     NamedFile::open_async("./static/index.html").await.unwrap()
 }
 
+use challonge::Challonge;
+
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
-    let torunament = Tournament::new().start();
+    let c = Challonge::new("tommylt3", "TUCP3PRoh8aJdYj1Pw5WNT0CJ3kVzCySwaztzM35");
+    let torunament = Tournament::new(c).start();
     HttpServer::new(move || {
         App::new()
             .app_data(web::Data::new(AppState {
