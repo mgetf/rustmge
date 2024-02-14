@@ -123,7 +123,9 @@ async fn index() -> impl Responder {
     NamedFile::open_async("./static/index.html").await.unwrap()
 }
 
-use challonge::Challonge;
+extern crate challonge as challonge_api;
+
+use self::challonge_api::Challonge;
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {

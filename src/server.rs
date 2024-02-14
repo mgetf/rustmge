@@ -3,9 +3,9 @@ use actix::prelude::*;
 use actix_web_actors::ws::Message;
 
 pub struct MatchDetails {
-    arenaId: String,
-    p1Id: String,
-    p2Id: String,
+    arena_id: String,
+    p1_id: String,
+    p2_id: String,
 }
 
 pub struct Tournament {
@@ -29,8 +29,8 @@ impl Tournament {
         Tournament {
             admin: None,
             servers: vec![],
-            c: c,
-            tc: tc,
+            c,
+            tc,
             players: vec![],
             matches: vec![],
         }
@@ -57,7 +57,7 @@ impl Handler<ForwardMessage> for Tournament {
             }
             MessagePayload::AdminInstigateMatch {} => {
                 // instigate match, send out match details
-                for servers in self.servers.iter() {
+                for servers in &self.servers {
                     servers.do_send(ForwardMessage {
                         message: MessagePayload::MatchDetails {
                             arenaId: "1".to_string(),
@@ -72,7 +72,7 @@ impl Handler<ForwardMessage> for Tournament {
                 todo!("tournametn manager should not receive this")
             }
             MessagePayload::UsersInServerRequest {} => {
-                for server in self.servers.iter() {
+                for server in &self.servers {
                     server.do_send(ForwardMessage {
                         message: MessagePayload::UsersInServerRequest {},
                         from: msg.from.clone(),
