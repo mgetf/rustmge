@@ -17,7 +17,7 @@ pub struct Tournament {
     tc: challonge::Tournament,
 }
 
-use challonge::Challonge;
+use challonge::{Challonge, Participant};
 
 impl Tournament {
     pub fn new(c: Challonge) -> Self {
@@ -142,7 +142,7 @@ impl Handler<ForwardMessage> for Tournament {
                                 misc: player.steamId.clone(),
                             },
                         )
-                        .unwrap();
+                        .err();
                 }
 
                 crate::challonge::start_tournament(&self.tc);

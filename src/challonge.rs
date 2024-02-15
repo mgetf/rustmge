@@ -42,23 +42,6 @@ pub fn create_tournament(c: &Challonge, url: String, title: String) -> challonge
     c.create_tournament(&tc).unwrap()
 }
 
-pub fn add_participant(
-    c: &Challonge,
-    tc: &Tournament,
-    name: String,
-    steamid: String,
-) -> challonge::Participant {
-    let pc = ParticipantCreate {
-        name: Some(name.clone()),
-        challonge_username: None,
-        email: name.clone() + "@mge.tf",
-        seed: 1,
-        misc: steamid,
-    };
-
-    c.create_participant(&tc.id, &pc).unwrap()
-}
-
 pub fn start_tournament(tc: &Tournament) {
     let mut mp = std::collections::HashMap::new();
     mp.insert("api_key", crate::challonge::API_KEY);
@@ -67,6 +50,34 @@ pub fn start_tournament(tc: &Tournament) {
         .post(&format!(
             "https://api.challonge.com/v1/tournaments/{}/start.json",
             tc.id
+        ))
+        .json(&mp)
+        .send()
+        .unwrap();
+}
+use serde_json::{json, Value};
+
+pub fn update_match(
+    tc: &Tournament,
+    m: &challonge::Match,
+    winner: &challonge::ParticipantId,
+    scoreline: &str,
+) {
+    let mut mp = std::collections::HashMap::new();
+    let mut matches = std::collections::HashMap::new();
+    matches.insert("scores_csv", json!(scoreline));
+    matches.insert("winner_id", json!(winner.0));
+
+    mp.insert("api_key", json!(crate::challonge::API_KEY));
+    mp.insert("match", json!(matches));
+
+    let client = reqwest::blocking::Client::new();
+
+    println!("reporting match");
+    let put = client
+        .put(&format!(
+            "https://api.challonge.com/v1/tournaments/{}/matches/{:?}.json",
+            tc.id, m.id.0,
         ))
         .json(&mp)
         .send()
@@ -96,22 +107,10 @@ pub fn report_match(c: &Challonge, tc: &Tournament, p1: SteamID, p2: SteamID) {
 
         if mp1.1 == p1 && mp2.1 == p2 {
             println!("reporting match between {} and {}", mp1.0, mp2.0);
-            let match_update = challonge::MatchUpdate {
-                scores_csv: MatchScores(vec![MatchScore(1, 0)]),
-                winner_id: Some(m.player1.id.clone()),
-                player1_votes: None,
-                player2_votes: None,
-            };
-            c.update_match(&tc.id, &m.id, &match_update).unwrap();
+            update_match(&tc, &m, &m.player1.id, "1-0");
         } else if (mp1.1 == p2 && mp2.1 == p1) {
             println!("reporting match between {} and {}", mp1.0, mp2.0);
-            let match_update = challonge::MatchUpdate {
-                scores_csv: MatchScores(vec![MatchScore(0, 1)]),
-                winner_id: Some(m.player2.id.clone()),
-                player1_votes: None,
-                player2_votes: None,
-            };
-            c.update_match(&tc.id, &m.id, &match_update).unwrap();
+            update_match(&tc, &m, &m.player2.id, "0-1");
         }
     }
 }
@@ -164,7 +163,7 @@ pub fn main() {
         ];
 
         for (name, steamid) in participants {
-            add_participant(&c, &tc, name, steamid);
+            //add_participant(&c, &tc, name, steamid);
         }
     } else {
         tc = c
