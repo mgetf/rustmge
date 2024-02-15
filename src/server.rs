@@ -97,6 +97,9 @@ impl Handler<ForwardMessage> for Tournament {
                 println!("recieved players {:?}", players);
                 self.players = players;
             }
+            MessagePayload::Error { message } => {
+                println!("recieved error {:?}", message);
+            }
         }
     }
 }

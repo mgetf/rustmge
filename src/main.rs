@@ -46,6 +46,9 @@ enum MessagePayload {
     UsersInServer {
         players: Vec<Player>,
     },
+    Error {
+        message: String,
+    },
 }
 
 struct AppState {
@@ -94,12 +97,23 @@ impl StreamHandler<Result<ws::Message, ws::ProtocolError>> for ServerWs {
             Ok(ws::Message::Pong(_)) => println!("Pong received"),
             Ok(ws::Message::Text(text)) => {
                 println!("Text received: {}", text);
-                let parsed: MessagePayload =
-                    serde_json::from_str(&text).expect("unrecognized json");
-                self.addr.do_send(ForwardMessage {
-                    message: parsed,
-                    from: ctx.address(),
-                });
+                let parsed: Result<MessagePayload, serde_json::Error> = serde_json::from_str(&text);
+                match parsed {
+                    Ok(p) => {
+                        self.addr.do_send(ForwardMessage {
+                            message: p,
+                            from: ctx.address(),
+                        });
+                    }
+                    Err(e) => {
+                        self.addr.do_send(ForwardMessage {
+                            message: MessagePayload::Error {
+                                message: e.to_string(),
+                            },
+                            from: ctx.address(),
+                        });
+                    }
+                }
             }
             Ok(ws::Message::Binary(bin)) => ctx.binary(bin),
             _ => (),
@@ -123,11 +137,9 @@ async fn index() -> impl Responder {
     NamedFile::open_async("./static/index.html").await.unwrap()
 }
 
-use challonge::Challonge;
-
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
-    let c = Challonge::new("tommylt3", "TUCP3PRoh8aJdYj1Pw5WNT0CJ3kVzCySwaztzM35");
+    let c = challonge::Challonge::new("tommylt3", "TUCP3PRoh8aJdYj1Pw5WNT0CJ3kVzCySwaztzM35");
     let torunament = Tournament::new(c).start();
     HttpServer::new(move || {
         App::new()

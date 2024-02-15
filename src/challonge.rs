@@ -4,7 +4,7 @@ use challonge::tournament::{
     GamePoints, RankedBy, Tournament, TournamentCreate, TournamentId, TournamentIncludes,
     TournamentState, TournamentType,
 };
-use challonge::Challonge;
+pub use challonge::Challonge;
 use challonge::ParticipantCreate;
 use chrono::*;
 
