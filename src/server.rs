@@ -55,7 +55,11 @@ impl Handler<ForwardMessage> for Tournament {
                     self.servers.push(msg.from);
                 }
             }
-            MessagePayload::MatchDetails { arenaId, p1Id, p2Id } => {
+            MessagePayload::MatchDetails {
+                arenaId,
+                p1Id,
+                p2Id,
+            } => {
                 for servers in &self.servers {
                     servers.do_send(ForwardMessage {
                         message: MessagePayload::MatchDetails {
@@ -67,7 +71,7 @@ impl Handler<ForwardMessage> for Tournament {
                     })
                 }
             }
-            
+
             MessagePayload::TournamentStart {} => {
                 for server in &self.servers {
                     server.do_send(ForwardMessage {
@@ -80,8 +84,7 @@ impl Handler<ForwardMessage> for Tournament {
                 delinquents,
                 arrived,
                 arena,
-            } => {
-            }
+            } => {}
             MessagePayload::MatchResults {
                 winner,
                 loser,
@@ -89,12 +92,25 @@ impl Handler<ForwardMessage> for Tournament {
             } => {
                 todo!()
             }
-            MessagePayload::MatchBegan { p1Id, p2Id } => {
-
-            }
+            MessagePayload::MatchBegan { p1Id, p2Id } => {}
             MessagePayload::UsersInServer { players } => {
                 println!("recieved players {:?}", players);
                 self.players = players;
+                for player in &self.players {
+                    println!("adding player {:?}", player.name);
+                    self.c
+                        .create_participant(
+                            &self.tc.id,
+                            &challonge::ParticipantCreate {
+                                name: Some(player.name.clone()),
+                                challonge_username: None,
+                                email: player.name.clone() + "@mge.tf",
+                                seed: 1,
+                                misc: player.steamId.clone(),
+                            },
+                        )
+                        .unwrap();
+                }
             }
             MessagePayload::Error { message } => {
                 println!("recieved error {:?}", message);
