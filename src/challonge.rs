@@ -14,7 +14,7 @@ pub fn create_tournament(c: &Challonge, url: String, title: String) -> challonge
     let tc = TournamentCreate {
         name: title.to_owned(),
         tournament_type: TournamentType::SingleElimination,
-        url: url,
+        url,
         subdomain: SUBDOMAIN.to_string(),
         description: "Test tournament created from challonge-rs".to_owned(),
         open_signup: false,
@@ -35,7 +35,7 @@ pub fn create_tournament(c: &Challonge, url: String, title: String) -> challonge
         game_name: Some("mge".to_owned()),
     };
 
-    return c.create_tournament(&tc).unwrap();
+    c.create_tournament(&tc).unwrap()
 }
 
 pub fn add_participant(
@@ -52,7 +52,7 @@ pub fn add_participant(
         misc: steamid,
     };
 
-    return c.create_participant(&tc.id, &pc).unwrap();
+    c.create_participant(&tc.id, &pc).unwrap()
 }
 
 pub fn pending_matches(
