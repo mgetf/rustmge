@@ -35,6 +35,22 @@ impl Tournament {
             matches: vec![],
         }
     }
+
+    pub fn send_pending_matches(&self) {
+        let pending = crate::challonge::pending_matches(&self.c, &self.tc);
+        for ((p1, p1id), (p2, p2id)) in pending {
+            for server in &self.servers {
+                server.do_send(ForwardMessage {
+                    message: crate::MessagePayload::MatchDetails {
+                        arenaId: 1,
+                        p1Id: p1id.clone(),
+                        p2Id: p2id.clone(),
+                    },
+                    from: server.clone(),
+                });
+            }
+        }
+    }
 }
 
 impl Actor for Tournament {
@@ -42,6 +58,21 @@ impl Actor for Tournament {
 }
 
 use crate::MessagePayload;
+use reqwest;
+use std::{thread, time};
+
+impl StreamHandler<Result<Response<()>, reqwest::Error>> for Tournament {
+    fn handle(&mut self, msg: Result<Response<()>, reqwest::Error>, _ctx: &mut Self::Context) {
+        match msg {
+            Ok(resp) => {
+                println!("got response {:?}", resp);
+            }
+            Err(err) => {
+                println!("got error {:?}", err);
+            }
+        }
+    }
+}
 
 impl Handler<ForwardMessage> for Tournament {
     type Result = ();
@@ -79,6 +110,8 @@ impl Handler<ForwardMessage> for Tournament {
                         from: msg.from.clone(),
                     });
                 }
+
+                self.send_pending_matches();
             }
             MessagePayload::MatchCancel {
                 delinquents,
@@ -90,7 +123,7 @@ impl Handler<ForwardMessage> for Tournament {
                 loser,
                 finished,
             } => {
-                todo!()
+                crate::challonge::report_match(&self.c, &self.tc, winner, loser);
             }
             MessagePayload::MatchBegan { p1Id, p2Id } => {}
             MessagePayload::UsersInServer { players } => {
@@ -111,6 +144,8 @@ impl Handler<ForwardMessage> for Tournament {
                         )
                         .unwrap();
                 }
+
+                crate::challonge::start_tournament(&self.tc);
             }
             MessagePayload::Error { message } => {
                 println!("recieved error {:?}", message);

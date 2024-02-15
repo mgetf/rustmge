@@ -1383,6 +1383,7 @@ dependencies = [
  "actix-web-actors",
  "challonge",
  "chrono",
+ "reqwest",
  "serde",
  "serde_json",
 ]

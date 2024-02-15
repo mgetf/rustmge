@@ -145,7 +145,7 @@ use actix_web::rt::task;
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
-    let c = challonge::Challonge::new("tommylt3", "TUCP3PRoh8aJdYj1Pw5WNT0CJ3kVzCySwaztzM35");
+    let c = challonge::Challonge::new("tommylt3", crate::challonge::API_KEY);
     let tournament = Tournament::new(c).start();
     HttpServer::new(move || {
         App::new()

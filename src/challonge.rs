@@ -1,14 +1,18 @@
 use std::ops::{Add, Sub};
 
-use challonge::tournament::{
-    GamePoints, RankedBy, Tournament, TournamentCreate, TournamentId, TournamentIncludes,
-    TournamentState, TournamentType,
-};
 pub use challonge::Challonge;
 use challonge::ParticipantCreate;
+use challonge::{
+    tournament::{
+        GamePoints, RankedBy, Tournament, TournamentCreate, TournamentId, TournamentIncludes,
+        TournamentState, TournamentType,
+    },
+    MatchScore, MatchScores,
+};
 use chrono::*;
 
 pub const SUBDOMAIN: &str = "89c2a59aadab1761b8e29117";
+pub const API_KEY: &str = "TUCP3PRoh8aJdYj1Pw5WNT0CJ3kVzCySwaztzM35";
 
 pub fn create_tournament(c: &Challonge, url: String, title: String) -> challonge::Tournament {
     let tc = TournamentCreate {
@@ -55,6 +59,63 @@ pub fn add_participant(
     c.create_participant(&tc.id, &pc).unwrap()
 }
 
+pub fn start_tournament(tc: &Tournament) {
+    let mut mp = std::collections::HashMap::new();
+    mp.insert("api_key", crate::challonge::API_KEY);
+    let client = reqwest::blocking::Client::new();
+    let put = client
+        .post(&format!(
+            "https://api.challonge.com/v1/tournaments/{}/start.json",
+            tc.id
+        ))
+        .json(&mp)
+        .send()
+        .unwrap();
+}
+
+type SteamID = String;
+
+pub fn report_match(c: &Challonge, tc: &Tournament, p1: SteamID, p2: SteamID) {
+    let matches = c
+        .match_index(&tc.id, Some(challonge::MatchState::All), None)
+        .unwrap();
+    let participants = c.participant_index(&tc.id).unwrap();
+    let pid_to_name = participants
+        .0
+        .iter()
+        .map(|p| (p.id.0, (p.name.clone(), p.misc.clone())))
+        .collect::<std::collections::HashMap<_, _>>();
+    println!("{:?}", pid_to_name);
+    println!("{:?}", matches);
+    println!("{:?}", participants);
+
+    for m in matches.0 {
+        let mp1 = pid_to_name.get(&m.player1.id.0).unwrap();
+        let mp2 = pid_to_name.get(&m.player2.id.0).unwrap();
+        println!("checking match between {} and {}", mp1.0, mp2.0);
+
+        if mp1.1 == p1 && mp2.1 == p2 {
+            println!("reporting match between {} and {}", mp1.0, mp2.0);
+            let match_update = challonge::MatchUpdate {
+                scores_csv: MatchScores(vec![MatchScore(1, 0)]),
+                winner_id: Some(m.player1.id.clone()),
+                player1_votes: None,
+                player2_votes: None,
+            };
+            c.update_match(&tc.id, &m.id, &match_update).unwrap();
+        } else if (mp1.1 == p2 && mp2.1 == p1) {
+            println!("reporting match between {} and {}", mp1.0, mp2.0);
+            let match_update = challonge::MatchUpdate {
+                scores_csv: MatchScores(vec![MatchScore(0, 1)]),
+                winner_id: Some(m.player2.id.clone()),
+                player1_votes: None,
+                player2_votes: None,
+            };
+            c.update_match(&tc.id, &m.id, &match_update).unwrap();
+        }
+    }
+}
+
 pub fn pending_matches(
     c: &Challonge,
     tc: &Tournament,
@@ -65,7 +126,7 @@ pub fn pending_matches(
 
     let participants = c.participant_index(&tc.id).unwrap();
 
-    let pid_to_name: std::collections::HashMap<u64, (String, String)> = participants
+    let pid_to_name: std::collections::HashMap<u64, (String, SteamID)> = participants
         .0
         .iter()
         .map(|p| (p.id.0, (p.name.clone(), p.misc.clone())))
