@@ -81,7 +81,6 @@ impl Handler<ForwardMessage> for Tournament {
                 arrived,
                 arena,
             } => {
-                todo!()
             }
             MessagePayload::MatchResults {
                 winner,
@@ -89,6 +88,9 @@ impl Handler<ForwardMessage> for Tournament {
                 finished,
             } => {
                 todo!()
+            }
+            MessagePayload::MatchBegan { p1Id, p2Id } => {
+
             }
             MessagePayload::UsersInServer { players } => {
                 println!("recieved players {:?}", players);

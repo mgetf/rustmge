@@ -30,6 +30,10 @@ enum MessagePayload {
         p1Id: String,
         p2Id: String,
     },
+    MatchBegan {
+        p1Id: String,
+        p2Id: String,
+    },
     TournamentStart {},
     MatchResults {
         winner: String,

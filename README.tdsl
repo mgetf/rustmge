@@ -13,6 +13,7 @@ TournamentStart/UsersInServer (goes into tournament mode (all spec, only added p
 loop {
     MatchBegan
     MatchStart (initiates matches according to challonge)
-    MatchFinished
+    MatchResults
+    -- challonge business
 }
 TournamentFinished
