@@ -1,7 +1,18 @@
 start tournament
+TODO: sp disable exit to spec on roundwin when not in tournaent mode
+TODO: sp rename UsersInServerRequest to TournamenStart
 
 {"type": "ServerHello", "payload": {"apiKey": "", "serverNum": "1", "serverHost": "", "serverPort": "27015", "stvPort": ""}}
 {"type": "MatchCancel", "payload": {"delinquents": ["1", "2"], "arrived": "", "arena": 1}}
 {"type": "MatchResults", "payload": {"winner": "76561198041183975", "loser": "76561198306912450", "finished": true}}
 {"type": "UsersInServer", "payload": {"players": [{"steamId": "STEAM_ID_STOP_IGNORING_RETVALS", "name": "awesom"}]}}
 
+ServerHello
+TournamentStart/UsersInServer (goes into tournament mode (all spec, only added ppl allowwed))
+--challonge business
+loop {
+    MatchBegan
+    MatchStart (initiates matches according to challonge)
+    MatchFinished
+}
+TournamentFinished

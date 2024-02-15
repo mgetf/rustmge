@@ -55,26 +55,23 @@ impl Handler<ForwardMessage> for Tournament {
                     self.servers.push(msg.from);
                 }
             }
-            MessagePayload::AdminInstigateMatch {} => {
-                // instigate match, send out match details
+            MessagePayload::MatchDetails { arenaId, p1Id, p2Id } => {
                 for servers in &self.servers {
                     servers.do_send(ForwardMessage {
                         message: MessagePayload::MatchDetails {
-                            arenaId: "1".to_string(),
-                            p1Id: "1".to_string(),
-                            p2Id: "2".to_string(),
+                            arenaId: arenaId.clone(),
+                            p1Id: p1Id.clone(),
+                            p2Id: p2Id.clone(),
                         },
                         from: msg.from.clone(),
-                    });
+                    })
                 }
             }
-            MessagePayload::MatchDetails { .. } => {
-                todo!("tournametn manager should not receive this")
-            }
-            MessagePayload::UsersInServerRequest {} => {
+            
+            MessagePayload::TournamentStart {} => {
                 for server in &self.servers {
                     server.do_send(ForwardMessage {
-                        message: MessagePayload::UsersInServerRequest {},
+                        message: MessagePayload::TournamentStart {},
                         from: msg.from.clone(),
                     });
                 }

@@ -2,6 +2,7 @@ use actix::{Actor, AsyncContext, StreamHandler};
 use actix_files::{Files, NamedFile};
 use actix_web::{get, post, web, App, Error, HttpRequest, HttpResponse, HttpServer, Responder};
 use actix_web_actors::ws;
+use challonge_api::tournament;
 use serde::{Deserialize, Serialize};
 mod challonge;
 mod server;
@@ -23,16 +24,13 @@ enum MessagePayload {
         serverPort: String,
         stvPort: String,
     },
-    // from admin panel, start a match between two players
-    AdminInstigateMatch {},
-
     // sending
     MatchDetails {
-        arenaId: String,
+        arenaId: i32,
         p1Id: String,
         p2Id: String,
     },
-    UsersInServerRequest {},
+    TournamentStart {},
     MatchResults {
         winner: String,
         loser: String,
@@ -139,17 +137,17 @@ async fn index() -> impl Responder {
 
 extern crate challonge as challonge_api;
 
-use self::challonge_api::Challonge;
+use actix_web::rt::task;
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
     let c = challonge::Challonge::new("tommylt3", "TUCP3PRoh8aJdYj1Pw5WNT0CJ3kVzCySwaztzM35");
-    let torunament = Tournament::new(c).start();
+    let tournament = Tournament::new(c).start();
     HttpServer::new(move || {
         App::new()
             .app_data(web::Data::new(AppState {
                 app_name: String::from("Actix-web"),
-                tournment: torunament.clone(),
+                tournment: tournament.clone(),
             }))
             .route("/tf2serverep", web::get().to(server_route))
             .route("/", web::get().to(index))
