@@ -1,3 +1,5 @@
+extern crate challonge as challonge_api;
+
 use actix::{Actor, AsyncContext, StreamHandler};
 use actix_files::{Files, NamedFile};
 use actix_web::{get, post, web, App, Error, HttpRequest, HttpResponse, HttpServer, Responder};
@@ -138,8 +140,6 @@ async fn server_route(
 async fn index() -> impl Responder {
     NamedFile::open_async("./static/index.html").await.unwrap()
 }
-
-extern crate challonge as challonge_api;
 
 use actix_web::rt::task;
 
