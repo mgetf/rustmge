@@ -70,6 +70,7 @@
       <input type="submit" id="send" />
     </form>
 
+    <button id="debug0">SetArenaScore</button>
 
     <hr />
     <button id="debug1">simulate connect</button>
@@ -84,12 +85,14 @@
     <button id="debug6">MatchResults</button>
 
 
+
     <script>
       const $status = document.querySelector('#status')
       const $connectButton = document.querySelector('#connect')
       const $log = document.querySelector('#log')
       const $form = document.querySelector('#chatform')
       const $input = document.querySelector('#text')
+      const $debug0 = document.querySelector('#debug0')
       const $debug1 = document.querySelector('#debug1')
       const $debug2 = document.querySelector('#debug2')
       const $debug3 = document.querySelector('#debug3')
@@ -177,6 +180,11 @@
 
         $input.value = ''
         $input.focus()
+      })
+
+      $debug0.addEventListener('click', () => {
+        const text = JSON.stringify({"type": "SetMatchScore", "payload": {"arenaId": 0, "p1Score": 5, "p2Score": 10}}) 
+        $input.value = text
       })
 
       $debug1.addEventListener('click', () => {

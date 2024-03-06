@@ -53,17 +53,16 @@ enum MessagePayload {
     Error {
         message: String,
     },
+    SetMatchScore {
+        arenaId: i32,
+        p1Score: i32,
+        p2Score: i32,
+    },
 }
 
 struct AppState {
     app_name: String,
     tournment: actix::Addr<server::Tournament>,
-}
-
-#[derive(Debug)]
-struct Server {
-    apiKey: String,
-    address: actix::Addr<ServerWs>,
 }
 
 use crate::server::Tournament;
