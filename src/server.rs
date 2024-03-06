@@ -124,6 +124,7 @@ impl Handler<ForwardMessage> for Tournament {
                 finished,
             } => {
                 crate::challonge::report_match(&self.c, &self.tc, winner, loser);
+                self.send_pending_matches();
             }
             MessagePayload::MatchBegan { p1Id, p2Id } => {}
             MessagePayload::UsersInServer { players } => {
@@ -146,6 +147,7 @@ impl Handler<ForwardMessage> for Tournament {
                 }
 
                 crate::challonge::start_tournament(&self.tc);
+                self.send_pending_matches();
             }
             MessagePayload::Error { message } => {
                 println!("recieved error {:?}", message);
