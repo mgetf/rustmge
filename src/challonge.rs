@@ -120,6 +120,8 @@ pub fn report_match(c: &Challonge, tc: &Tournament, p1: SteamID, p2: SteamID) {
         .map(|p| (p.id.0, (p.name.clone(), p.misc.clone())))
         .collect::<std::collections::HashMap<_, _>>();
 
+    println!("{:?}", pid_to_name);
+
     for m in matches.0 {
         let mp1 = pid_to_name.get(&m.player1.id.0).unwrap();
         let mp2 = pid_to_name.get(&m.player2.id.0).unwrap();
