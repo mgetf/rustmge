@@ -171,19 +171,7 @@ impl Handler<ForwardMessage> for Tournament {
                 self.players = players;
                 for player in &self.players {
                     println!("adding player {:?}", player.name);
-                    self.c
-                        .create_participant(
-                            &self.tc.id,
-                            &challonge::ParticipantCreate {
-                                name: Some(player.name.clone()),
-                                challonge_username: None,
-                                email: player.name.clone() + "@mge.tf",
-                                seed: 1,
-                                misc: player.steamId.clone(),
-                            },
-                        )
-                        .err()
-                        .map(|e| println!("error adding participant {:?}", e));
+                    crate::challonge::add_participant(&self.tc, &player.name, &player.steamId);
                 }
 
                 crate::challonge::start_tournament(&self.tc);

@@ -42,6 +42,30 @@ pub fn create_tournament(c: &Challonge, url: String, title: String) -> challonge
     c.create_tournament(&tc).unwrap()
 }
 
+pub fn add_participant(tc: &Tournament, name: &String, steamid: &String) {
+    let mut mp = std::collections::HashMap::new();
+    mp.insert("api_key", json!(crate::challonge::API_KEY));
+    mp.insert(
+        "participant",
+        json!({"name": name, 
+                  "seed": 1,
+                  "misc": steamid}),
+    );
+
+    let client = reqwest::blocking::Client::new();
+    let post = client
+        .post(&format!(
+            "https://api.challonge.com/v1/tournaments/{}/participants.json",
+            tc.id
+        ))
+        .json(&mp)
+        .send()
+        .unwrap();
+
+    println!("{:?}", post);
+    println!("participant {} added", name);
+}
+
 pub fn start_tournament(tc: &Tournament) {
     let mut mp = std::collections::HashMap::new();
     mp.insert("api_key", crate::challonge::API_KEY);

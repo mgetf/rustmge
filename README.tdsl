@@ -1,6 +1,8 @@
-start tournament
-TODO: sp disable exit to spec on roundwin when not in tournaent mode
-TODO: sp rename UsersInServerRequest to TournamenStart
+rewrite the add players request to use reqwest so that I can read the error message
+remove non a-Z chars from steam name for email
+
+prevent from going to arena 0 (use list of preferred arenas)
+
 
 {"type": "ServerHello", "payload": {"apiKey": "", "serverNum": "1", "serverHost": "", "serverPort": "27015", "stvPort": ""}}
 {"type": "MatchCancel", "payload": {"delinquents": ["1", "2"], "arrived": "", "arena": 1}}
