@@ -168,6 +168,7 @@ impl Handler<ForwardMessage> for Tournament {
                 }
             }
             MessagePayload::TournamentStop {} => {
+                self.arena_to_match = vec![None; NUM_ARENAS];
                 for server in &self.servers {
                     server.do_send(ForwardMessage {
                         message: MessagePayload::TournamentStop {},

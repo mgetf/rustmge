@@ -121,6 +121,9 @@ pub fn report_match(c: &Challonge, tc: &Tournament, p1: SteamID, p2: SteamID) {
         .collect::<std::collections::HashMap<_, _>>();
 
     for m in matches.0 {
+        if m.winner_id.is_some() {
+            continue;
+        }
         let mp1 = pid_to_name.get(&m.player1.id.0);
         let mp2 = pid_to_name.get(&m.player2.id.0);
 

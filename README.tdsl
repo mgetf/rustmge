@@ -1,7 +1,7 @@
-make it so that stopping tournanment clears the active torunament arena array array
+overreporting matches
+
 finishing a match when tournament mode is disabled, is broken
 
-prevent from going to arena 0 (use list of preferred arenas)
 
 
 {"type": "ServerHello", "payload": {"apiKey": "", "serverNum": "1", "serverHost": "", "serverPort": "27015", "stvPort": ""}}
