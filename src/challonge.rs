@@ -120,9 +120,11 @@ pub fn report_match(c: &Challonge, tc: &Tournament, p1: SteamID, p2: SteamID) {
         .map(|p| (p.id.0, (p.name.clone(), p.misc.clone())))
         .collect::<std::collections::HashMap<_, _>>();
 
+    // {225973987: ("laptop gamer", "76561198046239819"), 225974138: ("awesom", "76561198041183975"), 225972847: ("awesom awesom", "76561198041183975")}
     println!("{:?}", pid_to_name);
 
     for m in matches.0 {
+        println!("{:?}", m);
         let mp1 = pid_to_name.get(&m.player1.id.0).unwrap();
         let mp2 = pid_to_name.get(&m.player2.id.0).unwrap();
         println!("checking match between {} and {}", mp1.0, mp2.0);
