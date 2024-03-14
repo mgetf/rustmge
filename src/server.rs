@@ -64,15 +64,14 @@ impl Tournament {
                     }
                 }
             }
+            let arena = get_open_arena(&self.arena_to_match, &self.arena_priority_order).unwrap();
+
+            let mut mtch = HashSet::new();
+            mtch.insert(p1id.clone());
+            mtch.insert(p2id.clone());
+            self.arena_to_match[arena] = Some(mtch);
+
             for server in &self.servers {
-                let arena =
-                    get_open_arena(&self.arena_to_match, &self.arena_priority_order).unwrap();
-
-                let mut mtch = HashSet::new();
-                mtch.insert(p1id.clone());
-                mtch.insert(p2id.clone());
-                self.arena_to_match[arena] = Some(mtch);
-
                 server.do_send(ForwardMessage {
                     message: crate::MessagePayload::MatchDetails {
                         arenaId: arena as i32,
@@ -83,6 +82,7 @@ impl Tournament {
                 });
             }
         }
+        println!("arenas {:?}", self.arena_to_match);
     }
 }
 
