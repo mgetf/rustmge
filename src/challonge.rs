@@ -63,7 +63,6 @@ pub fn add_participant(tc: &Tournament, name: &String, steamid: &String) {
         .unwrap();
 
     println!("{:?}", post);
-    println!("participant {} added", name);
 }
 
 pub fn start_tournament(tc: &Tournament) {

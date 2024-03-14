@@ -42,6 +42,7 @@ enum MessagePayload {
         winner: String,
         loser: String,
         finished: bool,
+        arena: i32,
     },
     MatchCancel {
         delinquents: Vec<String>,

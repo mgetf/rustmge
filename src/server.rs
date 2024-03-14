@@ -15,14 +15,18 @@ pub struct Tournament {
     servers: Vec<actix::Addr<ServerWs>>,
     players: Vec<crate::Player>,
     arena_to_match: Vec<Option<Vec<String>>>,
+    arena_priority_order: Vec<i32>,
     c: Challonge,
     tc: challonge::Tournament,
 }
 
-pub fn get_open_arena(arena_to_match: &Vec<Option<Vec<String>>>) -> Option<usize> {
-    for (i, match_details) in arena_to_match.iter().enumerate() {
-        if match_details.is_none() {
-            return Some(i);
+pub fn get_open_arena(
+    arena_to_match: &Vec<Option<Vec<String>>>,
+    arena_priority_order: &Vec<i32>,
+) -> Option<usize> {
+    for &arena in arena_priority_order {
+        if arena_to_match[arena as usize].is_none() {
+            return Some(arena as usize);
         }
     }
     None
@@ -44,6 +48,7 @@ impl Tournament {
             tc,
             players: vec![],
             arena_to_match: vec![None; NUM_ARENAS],
+            arena_priority_order: vec![5, 6, 7, 1, 2, 3, 4, 8, 9, 10, 11, 12, 13, 14, 15, 16],
         }
     }
 
@@ -51,7 +56,8 @@ impl Tournament {
         let pending = crate::challonge::pending_matches(&self.c, &self.tc);
         for ((p1, p1id), (p2, p2id)) in pending {
             for server in &self.servers {
-                let arena = get_open_arena(&self.arena_to_match).unwrap();
+                let arena =
+                    get_open_arena(&self.arena_to_match, &self.arena_priority_order).unwrap();
                 self.arena_to_match[arena] = Some(vec![p1.clone(), p2.clone()]);
 
                 server.do_send(ForwardMessage {
@@ -156,13 +162,17 @@ impl Handler<ForwardMessage> for Tournament {
                 delinquents,
                 arrived,
                 arena,
-            } => {}
+            } => {
+                self.arena_to_match[arena as usize] = None;
+            }
             MessagePayload::MatchResults {
                 winner,
                 loser,
                 finished,
+                arena,
             } => {
                 crate::challonge::report_match(&self.c, &self.tc, winner, loser);
+                self.arena_to_match[arena as usize] = None;
                 self.send_pending_matches();
             }
             MessagePayload::MatchBegan { p1Id, p2Id } => {}
