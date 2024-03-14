@@ -177,7 +177,8 @@ impl Handler<ForwardMessage> for Tournament {
                                 misc: player.steamId.clone(),
                             },
                         )
-                        .err();
+                        .err()
+                        .map(|e| println!("error adding participant {:?}", e));
                 }
 
                 crate::challonge::start_tournament(&self.tc);

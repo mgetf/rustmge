@@ -17,3 +17,11 @@ loop {
     -- challonge business
 }
 TournamentFinished
+
+{{{{{}}}}}
+TODO: debug why this is sending me to the arena with someone when it should error. where is it getting that other steamid?
+Text received: {"type": "UsersInServer", "payload": {"players": [{"steamId": "76561198041183975", "name": "awesom"}]}}
+recieved players [Player { steamId: "76561198041183975", name: "awesom" }]
+adding player "awesom"
+Forwarding message: MatchDetails { arenaId: 0, p1Id: "76561198306912450", p2Id: "76561198041183975" }
+Forwarding message: MatchDetails { arenaId: 1, p1Id: "76561198306912450", p2Id: "76561198041183975" }
