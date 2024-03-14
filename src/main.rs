@@ -37,6 +37,7 @@ enum MessagePayload {
         p2Id: String,
     },
     TournamentStart {},
+    TournamentStop {},
     MatchResults {
         winner: String,
         loser: String,

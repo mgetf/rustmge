@@ -136,7 +136,6 @@ impl Handler<ForwardMessage> for Tournament {
                     });
                 }
             }
-
             MessagePayload::TournamentStart {} => {
                 for server in &self.servers {
                     server.do_send(ForwardMessage {
@@ -144,8 +143,14 @@ impl Handler<ForwardMessage> for Tournament {
                         from: msg.from.clone(),
                     });
                 }
-
-                self.send_pending_matches();
+            }
+            MessagePayload::TournamentStop {} => {
+                for server in &self.servers {
+                    server.do_send(ForwardMessage {
+                        message: MessagePayload::TournamentStop {},
+                        from: msg.from.clone(),
+                    });
+                }
             }
             MessagePayload::MatchCancel {
                 delinquents,
