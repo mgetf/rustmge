@@ -85,6 +85,7 @@
     <button id="debug6">MatchResults</button>
 
 
+    <button id="debug7">TournamentStop</button>
 
     <script>
       const $status = document.querySelector('#status')
@@ -99,6 +100,7 @@
       const $debug4 = document.querySelector('#debug4')
       const $debug5 = document.querySelector('#debug5')
       const $debug6 = document.querySelector('#debug6')
+      const $debug7 = document.querySelector('#debug7')
 
       /** @type {WebSocket | null} */
       var socket = null
@@ -232,6 +234,13 @@
            "payload": { winner: "76561198041183975", 
                         loser: "76561198306912450",
                         finished: true}}) 
+        log('sent ' + text)
+        socket.send(text)
+      })
+      $debug7.addEventListener('click', () => {
+        const text =JSON.stringify(
+          {"type": "TournamentStop", 
+           "payload": {}}) 
         log('sent ' + text)
         socket.send(text)
       })
