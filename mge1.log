@@ -1,0 +1,40 @@
+Text received: {"type": "ServerHello", "payload": {"apiKey": "", "serverNum": "1", "serverHost": "mge.tf", "serverPort": "27015", "stvPort": ""}}
+Text received: {"type":"TournamentStart","payload":{}}
+recieved players [Player { steamId: "76561198041183975", name: "awesom" }, 
+                  Player { steamId: "76561198046239819", name: "laptop gamer" }, 
+                  Player { steamId: "76561198406114836", name: "javaris jamar javarison-lamar" }, 
+                  Player { steamId: "76561198044856349", name: "4/16" }]
+
+Forwarding message: MatchDetails { arenaId: 5, p1Id: "76561198044856349", p2Id: "76561198041183975" } // 4/16 vs awesom
+Forwarding message: MatchDetails { arenaId: 6, p1Id: "76561198406114836", p2Id: "76561198046239819" } // javaris jamar javarison-lamar vs laptop gamer
+Text received: {"type": "MatchResults", "payload": {"winner": "76561198406114836", "loser": "76561198046239819", "finished": true, "arena": 6}} // winner javaris, loser laptop gamer
+checking match between 4/16 and awesom
+checking match between javaris jamar javarison-lamar and laptop gamer
+reporting match between javaris jamar javarison-lamar and laptop gamer
+reporting match
+Forwarding message: MatchDetails { arenaId: 6, p1Id: "76561198044856349", p2Id: "76561198041183975" } // 4/16 vs awesom // BUG! THIS MATCH IS ALREADY ONGOING
+Text received: {"type": "MatchBegan", "payload": {"p1": "76561198044856349", "p2": "76561198041183975"}}
+recieved error "missing field `p1Id` at line 1 column 88"
+Text received: {"type": "MatchResults", "payload": {"winner": "76561198041183975", "loser": "76561198044856349", "finished": false, "arena": 6}} // winner awesom, loser 4/16 WRONG
+checking match between 4/16 and awesom
+reporting match between 4/16 and awesom
+reporting match
+checking match between javaris jamar javarison-lamar and laptop gamer
+Forwarding message: MatchDetails { arenaId: 6, p1Id: "76561198041183975", p2Id: "76561198406114836" }
+Text received: {"type": "MatchBegan", "payload": {"p1": "76561198041183975", "p2": "76561198406114836"}}
+recieved error "missing field `p1Id` at line 1 column 88"
+Text received: {"type": "MatchResults", "payload": {"winner": "76561198044856349", "loser": "76561198406114836", "finished": true, "arena": 6}}
+checking match between 4/16 and awesom
+checking match between javaris jamar javarison-lamar and laptop gamer
+checking match between 4/16 and javaris jamar javarison-lamar
+reporting match between 4/16 and javaris jamar javarison-lamar
+reporting match
+server!!! Ok(HttpResponse { error: None, res:
+Response HTTP/1.1 101 Switching Protocols
+  headers:
+    "sec-websocket-accept": "iMFx605W2wxLCZ5+irhoB91NZsw="
+    "upgrade": "websocket"
+  body: Stream
+ })
+Text received: {"type":"TournamentStop","payload":{}}
+Forwarding message: TournamentStop

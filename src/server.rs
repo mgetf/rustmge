@@ -1,6 +1,7 @@
+use std::collections::HashSet;
+
 use crate::{challonge::SUBDOMAIN, ForwardMessage, ServerWs};
 use actix::prelude::*;
-use actix_web_actors::ws::Message;
 
 const NUM_ARENAS: usize = 16;
 
@@ -14,14 +15,14 @@ pub struct Tournament {
     admin: Option<actix::Addr<ServerWs>>,
     servers: Vec<actix::Addr<ServerWs>>,
     players: Vec<crate::Player>,
-    arena_to_match: Vec<Option<Vec<String>>>,
+    arena_to_match: Vec<Option<HashSet<String>>>,
     arena_priority_order: Vec<i32>,
     c: Challonge,
     tc: challonge::Tournament,
 }
 
 pub fn get_open_arena(
-    arena_to_match: &Vec<Option<Vec<String>>>,
+    arena_to_match: &Vec<Option<HashSet<String>>>,
     arena_priority_order: &Vec<i32>,
 ) -> Option<usize> {
     for &arena in arena_priority_order {
@@ -36,7 +37,7 @@ use challonge::{matches::Player, Challonge};
 
 impl Tournament {
     pub fn new(c: Challonge) -> Self {
-        let tid = challonge::TournamentId::Url(SUBDOMAIN.to_string(), "mge1".to_string());
+        let tid = challonge::TournamentId::Url(SUBDOMAIN.to_string(), "mge2".to_string());
         let tc = c
             .get_tournament(&tid, &challonge::TournamentIncludes::All)
             .unwrap();
@@ -55,10 +56,22 @@ impl Tournament {
     pub fn send_pending_matches(&mut self) {
         let pending = crate::challonge::pending_matches(&self.c, &self.tc);
         for ((p1, p1id), (p2, p2id)) in pending {
+            // skip pending matches that are currently getting played
+            for arena in &self.arena_to_match {
+                if let Some(mtch) = arena {
+                    if mtch.contains(&p1id) || mtch.contains(&p2id) {
+                        continue;
+                    }
+                }
+            }
             for server in &self.servers {
                 let arena =
                     get_open_arena(&self.arena_to_match, &self.arena_priority_order).unwrap();
-                self.arena_to_match[arena] = Some(vec![p1.clone(), p2.clone()]);
+
+                let mut mtch = HashSet::new();
+                mtch.insert(p1id.clone());
+                mtch.insert(p2id.clone());
+                self.arena_to_match[arena] = Some(mtch);
 
                 server.do_send(ForwardMessage {
                     message: crate::MessagePayload::MatchDetails {
@@ -110,10 +123,14 @@ impl Handler<ForwardMessage> for Tournament {
                 p1Id,
                 p2Id,
             } => {
+                // this is for when we are receiving a match from the web ui, not likely scenario
                 if self.arena_to_match[arenaId as usize].is_some() {
                     println!("warning! overriding match in arena {:?}", arenaId);
                 }
-                self.arena_to_match[arenaId as usize] = Some(vec![p1Id.clone(), p2Id.clone()]);
+                let mut mtch = HashSet::new();
+                mtch.insert(p1Id.clone());
+                mtch.insert(p2Id.clone());
+                self.arena_to_match[arenaId as usize] = Some(mtch);
 
                 for servers in &self.servers {
                     servers.do_send(ForwardMessage {
