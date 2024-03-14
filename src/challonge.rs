@@ -122,6 +122,7 @@ pub fn report_match(c: &Challonge, tc: &Tournament, p1: SteamID, p2: SteamID) {
 
     for m in matches.0 {
         if m.winner_id.is_some() {
+            println!("skipping finished match");
             continue;
         }
         let mp1 = pid_to_name.get(&m.player1.id.0);
