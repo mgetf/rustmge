@@ -1,10 +1,13 @@
 extern crate challonge as challonge_api;
 
+use std::collections::{HashMap, HashSet};
+
 use actix::{Actor, AsyncContext, StreamHandler};
 use actix_files::{Files, NamedFile};
-use actix_web::{get, post, web, App, Error, HttpRequest, HttpResponse, HttpServer, Responder};
+use actix_web::{
+    get, guard::All, post, web, App, Error, HttpRequest, HttpResponse, HttpServer, Responder,
+};
 use actix_web_actors::ws;
-use challonge_api::tournament;
 use serde::{Deserialize, Serialize};
 mod challonge;
 mod server;
@@ -161,3 +164,13 @@ async fn main() -> std::io::Result<()> {
     .run()
     .await
 }
+
+// fn main() {
+//     let c = challonge_api::Challonge::new("tommylt3", crate::challonge::API_KEY);
+//     let tid = challonge_api::TournamentId::Url(
+//         crate::challonge::SUBDOMAIN.to_string(),
+//         "mge2".to_string(),
+//     );
+
+//     crate::challonge::get_matches(&tid);
+// }

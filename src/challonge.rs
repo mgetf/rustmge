@@ -1,7 +1,9 @@
-use std::ops::{Add, Sub};
+use std::{
+    collections::HashMap,
+    ops::{Add, Sub},
+};
 
 pub use challonge::Challonge;
-use challonge::ParticipantCreate;
 use challonge::{
     tournament::{
         GamePoints, RankedBy, Tournament, TournamentCreate, TournamentId, TournamentIncludes,
@@ -80,16 +82,11 @@ pub fn start_tournament(tc: &Tournament) {
 }
 use serde_json::{json, Value};
 
-pub fn update_match(
-    tc: &Tournament,
-    m: &challonge::Match,
-    winner: &challonge::ParticipantId,
-    scoreline: &str,
-) {
+pub fn update_match(tc: &Tournament, m: &Match, winner: &u64, scoreline: &str) {
     let mut mp = std::collections::HashMap::new();
     let mut matches = std::collections::HashMap::new();
     matches.insert("scores_csv", json!(scoreline));
-    matches.insert("winner_id", json!(winner.0));
+    matches.insert("winner_id", json!(winner));
 
     mp.insert("api_key", json!(crate::challonge::API_KEY));
     mp.insert("match", json!(matches));
@@ -100,7 +97,7 @@ pub fn update_match(
     let put = client
         .put(&format!(
             "https://api.challonge.com/v1/tournaments/{}/matches/{:?}.json",
-            tc.id, m.id.0,
+            tc.id, m.id,
         ))
         .json(&mp)
         .send()
@@ -110,33 +107,37 @@ pub fn update_match(
 type SteamID = String;
 
 pub fn report_match(c: &Challonge, tc: &Tournament, p1: SteamID, p2: SteamID) {
-    let matches = c
-        .match_index(&tc.id, Some(challonge::MatchState::All), None)
-        .unwrap();
+    let matches = get_matches(&tc.id);
     let participants = c.participant_index(&tc.id).unwrap();
-    let pid_to_name = participants
+    let pid_to_name: HashMap<u64, (String, SteamID)> = participants
         .0
         .iter()
         .map(|p| (p.id.0, (p.name.clone(), p.misc.clone())))
         .collect::<std::collections::HashMap<_, _>>();
 
-    for m in matches.0 {
+    for m in matches {
         if m.winner_id.is_some() {
             println!("skipping finished match");
             continue;
         }
-        let mp1 = pid_to_name.get(&m.player1.id.0);
-        let mp2 = pid_to_name.get(&m.player2.id.0);
-
-        match (mp1, mp2) {
-            (Some(mp1), Some(mp2)) => {
-                println!("checking match between {} and {}", mp1.0, mp2.0);
-                if mp1.1 == p1 && mp2.1 == p2 {
-                    println!("reporting match between {} and {}", mp1.0, mp2.0);
-                    update_match(&tc, &m, &m.player1.id, "1-0");
-                } else if (mp1.1 == p2 && mp2.1 == p1) {
-                    println!("reporting match between {} and {}", mp1.0, mp2.0);
-                    update_match(&tc, &m, &m.player2.id, "0-1");
+        match (m.player1_id, m.player2_id) {
+            (Some(mp1id), Some(mp2id)) => {
+                // if the match has both a player1 and player2
+                let mp1 = pid_to_name.get(&mp1id);
+                let mp2 = pid_to_name.get(&mp2id);
+                match (mp1, mp2) {
+                    // (name, steamid), (name, steamid)
+                    (Some(mp1), Some(mp2)) => {
+                        println!("checking match between {} and {}", mp1.0, mp2.0);
+                        if mp1.1 == p1 && mp2.1 == p2 {
+                            println!("reporting match between {} and {}", mp1.0, mp2.0);
+                            update_match(&tc, &m, &m.player1_id.unwrap(), "1-0");
+                        } else if (mp1.1 == p2 && mp2.1 == p1) {
+                            println!("reporting match between {} and {}", mp1.0, mp2.0);
+                            update_match(&tc, &m, &m.player2_id.unwrap(), "0-1");
+                        }
+                    }
+                    _ => {}
                 }
             }
             _ => {}
@@ -148,9 +149,7 @@ pub fn pending_matches(
     c: &Challonge,
     tc: &Tournament,
 ) -> Vec<((String, String), (String, String))> {
-    let index = c
-        .match_index(&tc.id, Some(challonge::MatchState::Open), None)
-        .unwrap();
+    let index = get_matches(&tc.id);
 
     let participants = c.participant_index(&tc.id).unwrap();
 
@@ -160,16 +159,21 @@ pub fn pending_matches(
         .map(|p| (p.id.0, (p.name.clone(), p.misc.clone())))
         .collect::<std::collections::HashMap<_, _>>();
 
-    index
-        .0
-        .iter()
-        .map(|matc| {
-            (
-                pid_to_name.get(&matc.player1.id.0).unwrap().clone(),
-                pid_to_name.get(&matc.player2.id.0).unwrap().clone(),
-            )
-        })
-        .collect()
+    let mut pending_matches = vec![];
+    for m in index {
+        if m.winner_id.is_some() {
+            continue;
+        }
+        let p1 = pid_to_name.get(&m.player1_id.unwrap());
+        let p2 = pid_to_name.get(&m.player2_id.unwrap());
+        match (p1, p2) {
+            (Some(p1), Some(p2)) => {
+                pending_matches.push((p1.clone(), p2.clone()));
+            }
+            _ => {}
+        }
+    }
+    pending_matches
 }
 
 pub fn main() {
@@ -213,4 +217,43 @@ pub fn main() {
 
     // println!("Tournament created with id: {}", tc.id);
     println!("Hello, world!");
+}
+
+#[derive(serde::Deserialize, Debug)]
+struct MatchLike {
+    #[serde(rename = "match")]
+    pub mat: Match,
+}
+#[derive(serde::Deserialize, Debug, Clone, Copy)]
+#[serde(tag = "match")]
+pub struct Match {
+    pub id: u64,
+    pub player1_id: Option<u64>,
+    pub player2_id: Option<u64>,
+    pub winner_id: Option<u64>,
+}
+
+pub fn get_matches(tid: &challonge_api::TournamentId) -> Vec<Match> {
+    let client = reqwest::blocking::Client::new();
+    let mut url = reqwest::Url::parse(&format!(
+        "https://api.challonge.com/v1/tournaments/{}/matches.json",
+        tid.to_string()
+    ))
+    .unwrap();
+
+    {
+        let mut pairs = url.query_pairs_mut();
+        pairs.append_pair("api_key", crate::challonge::API_KEY);
+        pairs.append_pair("state", "all");
+    }
+
+    let index = client.get(url.as_str()).send().unwrap().text();
+    let matches: Vec<MatchLike> = serde_json::from_str(&index.unwrap()).unwrap();
+    let matches = matches
+        .iter()
+        .map(|m| m.mat)
+        .filter(|m| m.winner_id.is_none())
+        .collect::<Vec<_>>();
+
+    matches
 }
