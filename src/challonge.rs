@@ -164,6 +164,9 @@ pub fn pending_matches(
         if m.winner_id.is_some() {
             continue;
         }
+        if m.player1_id.is_none() || m.player2_id.is_none() {
+            continue;
+        }
         let p1 = pid_to_name.get(&m.player1_id.unwrap());
         let p2 = pid_to_name.get(&m.player2_id.unwrap());
         match (p1, p2) {
