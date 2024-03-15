@@ -55,12 +55,12 @@ impl Tournament {
 
     pub fn send_pending_matches(&mut self) {
         let pending = crate::challonge::pending_matches(&self.c, &self.tc);
-        for ((p1, p1id), (p2, p2id)) in pending {
+        'outer: for ((p1, p1id), (p2, p2id)) in pending {
             // skip pending matches that are currently getting played
             for arena in &self.arena_to_match {
                 if let Some(mtch) = arena {
                     if mtch.contains(&p1id) || mtch.contains(&p2id) {
-                        continue;
+                        continue 'outer;
                     }
                 }
             }
