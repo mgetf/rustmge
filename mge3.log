@@ -1,0 +1,68 @@
+Text received: {"type":"TournamentStart","payload":{}}
+Forwarding message: TournamentStart
+Text received: {"type": "UsersInServer", "payload": {"players": [{"steamId": "76561198803159110", "name": "swat"}, {"steamId": "76561198889579299", "name": "12345tanbobby"}, {"steamId": "76561198041183975", "name": "awesom"}, {"steamId": "76561199581866080", "name": "broski"}]}}
+recieved players [Player { steamId: "76561198803159110", name: "swat" }, Player { steamId: "76561198889579299", name: "12345tanbobby" }, Player { steamId: "76561198041183975", name: "awesom" }, Player { steamId: "76561199581866080", name: "broski" }]
+adding player "swat"
+Response { url: Url { scheme: "https", cannot_be_a_base: false, username: "", password: None, host: Some(Domain("api.challonge.com")), port: None, path: "/v1/tournaments/14250816/participants.json", query: None, fragment: None }, status: 200, headers: {"date": "Fri, 15 Mar 2024 22:14:20 GMT", "content-type": "application/json; charset=utf-8", "content-length": "945", "connection": "keep-alive", "status": "200 OK", "x-frame-options": "SAMEORIGIN", "x-xss-protection": "1; mode=block", "x-content-type-options": "nosniff", "p3p": "CP=\"NOI ADM DEV PSAi COM NAV OUR OTRo STP IND DEM\"", "etag": "W/\"687ad2af7fcaf075854f7efd9edee901\"", "set-cookie": "refresh_token=cklkSEk5bVBjN0lDeVlJdzRwd3NVWTAvdVNFTHBnbmZFTDBwVEZrekcxUE00ZGViRkRJZThybkhPcElUQTlxOWFLU3VNNVErY1dTbWhmRjltV0pYam4zWkhteDhMYXFiNFhFcXJuSGVwUmpKSDRqTXF0Y3U1eWl1a3R3NWYrSTJOcmNRVVgzTHZxZ2xPdlZKeDIyb3d3OFQ5WkxCNVNSV0NNOWtRT0xpQ2M5K21CMjVrbmZzTlNybmJaaFJDc29kc2NJUmwvdFdHMGxEYVdCSVVhS3NTRDd1QTVUa1FMSGxic1pMWTA5TFBVMnBzMDlxTVZaSVg4M1RhVmZWUXpFS29rbGE5TUFmNGp2RTRwWU81T3R5b3lya2NhM2x0VjZwd29PRFFyYVNMVCtsZXQwZ25VOENlZUFldmxVR25xUmgtLVVSWkgvSjkwS1AwWVA0TXpyeXdyMXc9PQ%3D%3D--c933deb0647e2d29c16c88e3598cc5d3dd152216; path=/; expires=Sat, 16 Mar 2024 13:52:09 -0000; secure; HttpOnly", "set-cookie": "_ck=true; domain=.challonge.com; path=/; expires=Mon, 15 Apr 2024 22:14:20 -0000", "set-cookie": "__cf_bm=X3R7mTbkQNnruwpQCpYUtDX10ap5MXXB82YOpdBA0tQ-1710540860-1.0.1.1-lnyskGinLq87JJGJ_6DG0isYaoqydmzjrccl7ybfyUPYCl9hyz.bX3A4dCDPevuxl_4nBg41kd6jojdWBlYujA; path=/; expires=Fri, 15-Mar-24 22:44:20 GMT; domain=.challonge.com; HttpOnly; Secure", "x-request-id": "db9ee066-3328-4103-83f6-c640151fa022", "x-runtime": "0.074732", "cache-control": "private, max-age=0, no-store, must-revalidate", "pragma": "no-cache", "x-cache": "MISS", "accept-ranges": "bytes", "strict-transport-security": "max-age=31536000; includeSubDomains", "cf-cache-status": "DYNAMIC", "server": "cloudflare", "cf-ray": "864fdb174e9a423d-EWR"} }
+adding player "12345tanbobby"
+Response { url: Url { scheme: "https", cannot_be_a_base: false, username: "", password: None, host: Some(Domain("api.challonge.com")), port: None, path: "/v1/tournaments/14250816/participants.json", query: None, fragment: None }, status: 200, headers: {"date": "Fri, 15 Mar 2024 22:14:20 GMT", "content-type": "application/json; charset=utf-8", "transfer-encoding": "chunked", "connection": "keep-alive", "status": "200 OK", "x-frame-options": "SAMEORIGIN", "x-xss-protection": "1; mode=block", "x-content-type-options": "nosniff", "p3p": "CP=\"NOI ADM DEV PSAi COM NAV OUR OTRo STP IND DEM\"", "etag": "W/\"f70ca37cbc902d8fd0dad8cdcb15c08c\"", "set-cookie": "refresh_token=c2hSUU5RTXhDVnRpK2hsYUFrY25VU2hxZ2w2V3dhbGZkQjVVbjJVdEJVeEw5bVI2TXFjMHdzeVM2TjNCR1NJa21OaHlxV05oS3dGa2phTE8xek9LSlY5R0FMeGNhWWk0Nzk4TUhuRGI4aW1EUC8vUEtxMUxQVnpSNjJ0QlRsNm5KQzZjVXpPRXU2cytpKytXUWJUR214L1F1d1FpK2YyVmE4WTgxWUZTZnNHSGRwd2xBeHdhVngxVkpxS1kzVWZJM2MwdVA5bVF0RC9NRERFcThKWXdOWnlnblliWVZDa25nWUdsSGt2RmhwbEZ5eDkxdnEwUzZkTDJqV2hsUDcrRFRUVDQzNUJoTmtDK0FIMnNEakV2QVVleWdtaWRXNGlabXZJRU83M1VYdDQ3RTkycFlVWW0wbEZGejdaRjFNNEUtLUUrVHlFYmh1Q09IRUJkNjErMUtyZlE9PQ%3D%3D--3d64c5e420b225dc759f268e4dfb688ff471e342; path=/; expires=Sat, 16 Mar 2024 13:56:32 -0000; secure; HttpOnly", "set-cookie": "_ck=true; domain=.challonge.com; path=/; expires=Mon, 15 Apr 2024 22:14:20 -0000", "set-cookie": "__cf_bm=8aUaC31jnP8ABPwZeMxbNff_cdVfROpGPl8Jq.3jFCE-1710540860-1.0.1.1-NiElfr6VQCn9V3rn7PF6PoYkEKKvMpT0KQRqif6N.tq_cIne8oaRq40nTpVWwrVGT6s8Lbb8wG0fNqb7iIGnaQ; path=/; expires=Fri, 15-Mar-24 22:44:20 GMT; domain=.challonge.com; HttpOnly; Secure", "x-request-id": "85077352-ce69-4dd6-8b43-69ec92972620", "x-runtime": "0.076247", "cache-control": "private, max-age=0, no-store, must-revalidate", "pragma": "no-cache", "x-cache": "MISS", "accept-ranges": "bytes", "strict-transport-security": "max-age=31536000; includeSubDomains", "cf-cache-status": "DYNAMIC", "server": "cloudflare", "cf-ray": "864fdb18eeca236b-EWR"} }
+adding player "awesom"
+Response { url: Url { scheme: "https", cannot_be_a_base: false, username: "", password: None, host: Some(Domain("api.challonge.com")), port: None, path: "/v1/tournaments/14250816/participants.json", query: None, fragment: None }, status: 200, headers: {"date": "Fri, 15 Mar 2024 22:14:20 GMT", "content-type": "application/json; charset=utf-8", "content-length": "951", "connection": "keep-alive", "status": "200 OK", "x-frame-options": "SAMEORIGIN", "x-xss-protection": "1; mode=block", "x-content-type-options": "nosniff", "p3p": "CP=\"NOI ADM DEV PSAi COM NAV OUR OTRo STP IND DEM\"", "etag": "W/\"d3661dc4e4afc86080512347682ee78d\"", "set-cookie": "refresh_token=dzVEWERaRlZ4eFZyajRKVmlRcGJBcEl2clA4aUNrcUMzNmpqbWpDNUFHTURwR3JPY2x6VjV2UlhNUDVUTzRDVzlGbjRWV2VZYWM5b0lrb1E2WGZyc2x2ZzEvV09wRXh5TzJKZkJVUFU2TTFSbGpMeDNEcGxZZEc1am9WQkt5Z0xLSXR6dndzTkV4cGJQWlVSZmJ3Y3EzSjVET3VRWHR6VUtCWElCZ05pMkVTTUdKWWNORmRYZGdqck1UMFJYd3lhbVhhTndaczArK3dGWmNxQlo4cFYwdDV2RHhJL012USt2VHZHc0d2R3RGMVltcmlNM05PM1ZMRDJ3SVI3Y2g1WitDVVZBUkQzMlRSNDhOeDQ0MXNRdXZhTVJKZVZ6Y2tkY2F2UlJXQlBMQktJWjhlRmdEcWllWXVkR1NzM2RvWHAtLWd5OW4vZWM1MkxCUDl3UjVqRlhKYnc9PQ%3D%3D--0de628794d50331e19c595c5832660a3709e5497; path=/; expires=Sat, 16 Mar 2024 13:55:04 -0000; secure; HttpOnly", "set-cookie": "_ck=true; domain=.challonge.com; path=/; expires=Mon, 15 Apr 2024 22:14:20 -0000", "set-cookie": "__cf_bm=SNrYx1vMximkxOKO_uRMloZAy2BWmNo5KIP5xt0VTLU-1710540860-1.0.1.1-ZfI2bINu6vF3NkKmfBXeOiLpo_cD6GMlxCZrBpQ6w9pSpR2C2NoEiMMclvEbNloD3PdIzyrjIcv_KfsKaYEQyw; path=/; expires=Fri, 15-Mar-24 22:44:20 GMT; domain=.challonge.com; HttpOnly; Secure", "x-request-id": "74652ea2-ed98-4b8d-bdf1-f6fd93a81d63", "x-runtime": "0.071615", "cache-control": "private, max-age=0, no-store, must-revalidate", "pragma": "no-cache", "x-cache": "MISS", "accept-ranges": "bytes", "strict-transport-security": "max-age=31536000; includeSubDomains", "cf-cache-status": "DYNAMIC", "server": "cloudflare", "cf-ray": "864fdb1a698b41c1-EWR"} }
+adding player "broski"
+Response { url: Url { scheme: "https", cannot_be_a_base: false, username: "", password: None, host: Some(Domain("api.challonge.com")), port: None, path: "/v1/tournaments/14250816/participants.json", query: None, fragment: None }, status: 200, headers: {"date": "Fri, 15 Mar 2024 22:14:20 GMT", "content-type": "application/json; charset=utf-8", "content-length": "951", "connection": "keep-alive", "status": "200 OK", "x-frame-options": "SAMEORIGIN", "x-xss-protection": "1; mode=block", "x-content-type-options": "nosniff", "p3p": "CP=\"NOI ADM DEV PSAi COM NAV OUR OTRo STP IND DEM\"", "etag": "W/\"7b1215d20c53bfd4eee10f862ff99d22\"", "set-cookie": "refresh_token=OEs3cUJGaUpsTndzNW5sOFFMSVlUU0VtaFZ3V0FWWGFmc0FnWjRlWE5RcDR2cUJ2RklabEJSTTJBT1hpSk9LMiszT0h2dlhCVmRmcHdPZURpYURxeGo1eFhDUm5QcG1va24zdVMyZmVuRTR4bGtjYUZVUEtjdzlMbmFhSDJyVHNNYTJ3N0VUKytxY2JHZFhvWVhXUG16WUtpb1IvejRnVkxuTkJQdHVwZUcwbDBCSTE2UnEyREZ1SDR0a0JaY3pudE9hSlVuRjFUS2gwMHg0NVBnMXJhVFg5ODhFL3pncTJ3U2JLY2szN1g5elBmVnVhWWFKYUc1aFFIeHpETUVRZ2s1RTNsbm92Ry9BZ1BzWHhla1pjdDNJOVdEKzFwMzVVaGx2WTdHSFlBR1pmNUluN0ZXYlBkbU80cUV5c0dlc2EtLWhZMytmQnNJVWQ4dVh3a0M4RGovelE9PQ%3D%3D--8600c062e13526de28f4b286262c69b257335396; path=/; expires=Sat, 16 Mar 2024 13:44:39 -0000; secure; HttpOnly", "set-cookie": "_ck=true; domain=.challonge.com; path=/; expires=Mon, 15 Apr 2024 22:14:20 -0000", "set-cookie": "__cf_bm=ialF8iDypUvmE4GvJJVwmWzyphliYeqsQYFsxk2G3j0-1710540860-1.0.1.1-Rf1qXabtExPqbQ4ulmVmFm_bOBcg3b15Eb5jiWPK0oGKewl_YCl56SGD1kKua_h9HiZmIIudjC0G8AaKm_6jFQ; path=/; expires=Fri, 15-Mar-24 22:44:20 GMT; domain=.challonge.com; HttpOnly; Secure", "x-request-id": "5e131f15-31eb-4e08-a51a-0f7a754f21b4", "x-runtime": "0.088828", "cache-control": "private, max-age=0, no-store, must-revalidate", "pragma": "no-cache", "x-cache": "MISS", "accept-ranges": "bytes", "strict-transport-security": "max-age=31536000; includeSubDomains", "cf-cache-status": "DYNAMIC", "server": "cloudflare", "cf-ray": "864fdb1bff6041ff-EWR"} }
+Forwarding message: MatchDetails { arenaId: 5, p1Id: "76561199581866080", p2Id: "76561198803159110" }
+Forwarding message: MatchDetails { arenaId: 6, p1Id: "76561198041183975", p2Id: "76561198889579299" }
+arenas [None, None, None, None, None, Some({"76561199581866080", "76561198803159110"}), Some({"76561198889579299", "76561198041183975"}), None, None, None, None, None, None, None, None, None]
+Text received: {"type": "MatchBegan", "payload": {"p1": "76561199581866080", "p2": "76561198803159110"}}
+recieved error "missing field `p1Id` at line 1 column 88"
+Text received: {"type": "MatchBegan", "payload": {"p1": "76561198041183975", "p2": "76561198889579299"}}
+recieved error "missing field `p1Id` at line 1 column 88"
+Text received: {"type": "MatchResults", "payload": {"winner": "76561198041183975", "loser": "76561198889579299", "finished": true, "arena": 6}}
+checking match between broski and swat
+checking match between awesom and 12345tanbobby
+reporting match between awesom and 12345tanbobby
+reporting match
+arenas [None, None, None, None, None, Some({"76561199581866080", "76561198803159110"}), None, None, None, None, None, None, None, None, None, None]
+Text received: {"type": "MatchResults", "payload": {"winner": "76561199581866080", "loser": "76561198803159110", "finished": true, "arena": 5}}
+checking match between broski and swat
+reporting match between broski and swat
+reporting match
+Forwarding message: MatchDetails { arenaId: 5, p1Id: "76561199581866080", p2Id: "76561198041183975" }
+Forwarding message: MatchDetails { arenaId: 6, p1Id: "76561198803159110", p2Id: "76561198889579299" }
+arenas [None, None, None, None, None, Some({"76561199581866080", "76561198041183975"}), Some({"76561198803159110", "76561198889579299"}), None, None, None, None, None, None, None, None, None]
+Text received: {"type": "MatchBegan", "payload": {"p1": "76561198803159110", "p2": "76561198889579299"}}
+recieved error "missing field `p1Id` at line 1 column 88"
+Text received: {"type": "MatchBegan", "payload": {"p1": "76561199581866080", "p2": "76561198041183975"}}
+recieved error "missing field `p1Id` at line 1 column 88"
+Text received: {"type": "MatchResults", "payload": {"winner": "76561198041183975", "loser": "76561199581866080", "finished": true, "arena": 5}}
+checking match between broski and awesom
+reporting match between broski and awesom
+reporting match
+checking match between swat and 12345tanbobby
+arenas [None, None, None, None, None, None, Some({"76561198803159110", "76561198889579299"}), None, None, None, None, None, None, None, None, None]
+Text received: {"type": "MatchResults", "payload": {"winner": "76561198803159110", "loser": "76561198889579299", "finished": true, "arena": 6}}
+checking match between swat and 12345tanbobby
+reporting match between swat and 12345tanbobby
+reporting match
+Forwarding message: MatchDetails { arenaId: 5, p1Id: "76561199581866080", p2Id: "76561198803159110" }
+arenas [None, None, None, None, None, Some({"76561198803159110", "76561199581866080"}), None, None, None, None, None, None, None, None, None, None]
+Text received: {"type": "MatchBegan", "payload": {"p1": "76561199581866080", "p2": "76561198803159110"}}
+recieved error "missing field `p1Id` at line 1 column 88"
+Text received: {"type": "MatchResults", "payload": {"winner": "76561198803159110", "loser": "76561199581866080", "finished": false, "arena": 5}}
+checking match between broski and swat
+reporting match between broski and swat
+reporting match
+Forwarding message: MatchDetails { arenaId: 5, p1Id: "76561198041183975", p2Id: "76561198803159110" }
+New match in arena 5: 76561198041183975 76561198803159110 76561198041183975 76561198803159110
+player client 0 3
+player client 1 1
+L 03/15/2024 - 22:25:37: [SM] Exception reported: Client index 4 is invalid (arg 5)
+L 03/15/2024 - 22:25:37: [SM] Blaming: mgeme.smx
+L 03/15/2024 - 22:25:37: [SM] Call stack trace:
+L 03/15/2024 - 22:25:37: [SM]   [0] Format
+L 03/15/2024 - 22:25:37: [SM]   [1] Line 1600, mgeme.sp::ShowPlayerHud
+L 03/15/2024 - 22:25:37: [SM]   [2] Line 4945, mgeme.sp::Timer_StartDuel
+arenas [None, None, None, None, None, Some({"76561198041183975", "76561198803159110"}), None, None, None, None, None, None, None, None, None, None]
+Text received: {"type":"TournamentStop","payload":{}}
+Forwarding message: TournamentStop
+Text received: {"type": "MatchCancel", "payload": {"delinquents":

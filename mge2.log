@@ -1,0 +1,42 @@
+
+Text received: {"type":"TournamentStart","payload":{}}
+Forwarding message: TournamentStart
+Text received: {"type": "UsersInServer", "payload": {"players": [{"steamId": "76561198889579299", "name": "12345tanbobby"}, {"steamId": "76561199581866080", "name": "broski"}, {"steamId": "76561198306912450", "name": "cutx"}, {"steamId": "76561198803159110", "name": "swat"}, {"steamId": "76561198041183975", "name": "awesom"}]}}
+recieved players [Player { steamId: "76561198889579299", name: "12345tanbobby" }, 
+                  Player { steamId: "76561199581866080", name: "broski" }, 
+                  Player { steamId: "76561198306912450", name: "cutx" }, 
+                  Player { steamId: "76561198803159110", name: "swat" }, 
+                  Player { steamId: "76561198041183975", name: "awesom" }]
+adding player "12345tanbobby"
+arenas [None, None, None, None, None, Some({"76561198889579299", "76561199581866080"}), 5
+                                        Some({"76561198306912450", "76561198803159110"}), 6 
+                                        None, None, None, None, None, None, None, None, None]
+Forwarding message: MatchDetails { arenaId: 5, p1Id: "76561199581866080", p2Id: "76561198889579299" }
+Forwarding message: MatchDetails { arenaId: 6, p1Id: "76561198803159110", p2Id: "76561198306912450" }
+Text received: {"type": "MatchBegan", "payload": {"p1": "76561198803159110", "p2": "76561198306912450"}}
+recieved error "missing field `p1Id` at line 1 column 88"
+Text received: {"type": "MatchBegan", "payload": {"p1": "76561199581866080", "p2": "76561198889579299"}}
+recieved error "missing field `p1Id` at line 1 column 88"
+
+
+Text received: {"type": "MatchResults", "payload": {"winner": "76561198306912450", "loser": "76561198803159110", "finished": false, "arena": 6}} // winner cutx cause swat removed, correct
+checking match between broski and 12345tanbobby
+checking match between swat and cutx
+reporting match between swat and cutx
+reporting match //correct
+Forwarding message: MatchDetails { arenaId: 6, p1Id: "76561199581866080", p2Id: "76561198889579299" }
+arenas [None, None, None, None, None, Some({"76561198889579299", "76561199581866080"}), Some({"76561198889579299", "76561199581866080"}), None, None, None, None, None, None, None, None, None]
+Text received: {"type": "MatchBegan", "payload": {"p1": "76561199581866080", "p2": "76561198889579299"}}
+recieved error "missing field `p1Id` at line 1 column 88"
+Text received: {"type": "MatchResults", "payload": {"winner": "76561198306912450", "loser": "76561199581866080", "finished": false, "arena": 6}}
+checking match between broski and 12345tanbobby
+Forwarding message: MatchDetails { arenaId: 6, p1Id: "76561199581866080", p2Id: "76561198889579299" }
+arenas [None, None, None, None, None, Some({"76561198889579299", "76561199581866080"}), Some({"76561198889579299", "76561199581866080"}), None, None, None, None, None, None, None, None, None]
+Text received: {"type": "MatchBegan", "payload": {"p1": "76561199581866080", "p2": "76561198889579299"}}
+recieved error "missing field `p1Id` at line 1 column 88"
+Text received: {"type": "MatchResults", "payload": {"winner": "76561198306912450", "loser": "76561199581866080", "finished": false, "arena": 6}}
+checking match between broski and 12345tanbobby
+Forwarding message: MatchDetails { arenaId: 6, p1Id: "76561199581866080", p2Id: "76561198889579299" }
+arenas [None, None, None, None, None, Some({"76561198889579299", "76561199581866080"}), Some({"76561198889579299", "76561199581866080"}), None, None, None, None, None, None, None, None, None]
+Text received: {"type": "MatchBegan", "payload": {"p1": "76561199581866080", "p2": "76561198889579299"}}
+recieved error "missing field `p1Id` at line 1 column 88"

@@ -37,7 +37,7 @@ use challonge::{matches::Player, Challonge};
 
 impl Tournament {
     pub fn new(c: Challonge) -> Self {
-        let tid = challonge::TournamentId::Url(SUBDOMAIN.to_string(), "mge2".to_string());
+        let tid = challonge::TournamentId::Url(SUBDOMAIN.to_string(), "mge3".to_string());
         let tc = c
             .get_tournament(&tid, &challonge::TournamentIncludes::All)
             .unwrap();
