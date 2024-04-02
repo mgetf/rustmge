@@ -37,7 +37,7 @@ use challonge::{matches::Player, Challonge};
 
 impl Tournament {
     pub fn new(c: Challonge) -> Self {
-        let tid = challonge::TournamentId::Url(SUBDOMAIN.to_string(), "mge4".to_string());
+        let tid = challonge::TournamentId::Url(SUBDOMAIN.to_string(), "mge5".to_string());
         let tc = c
             .get_tournament(&tid, &challonge::TournamentIncludes::All)
             .unwrap();
@@ -49,7 +49,8 @@ impl Tournament {
             tc,
             players: vec![],
             arena_to_match: vec![None; NUM_ARENAS],
-            arena_priority_order: vec![5, 6, 7, 1, 2, 3, 4, 8, 9, 10, 11, 12, 13, 14, 15, 16],
+            //arena_priority_order: vec![5, 6, 7, 1, 2, 3, 4, 8, 9, 10, 11, 12, 13, 14, 15, 16], //spire
+            arena_priority_order: vec![1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16], //blands mid
         }
     }
 
@@ -181,6 +182,7 @@ impl Handler<ForwardMessage> for Tournament {
                 arrived,
                 arena,
             } => {
+                // TODO TODO TODO TODO TOOD TODO TODO TODO TODO TOODO TO DO
                 self.arena_to_match[arena as usize] = None;
             }
             MessagePayload::MatchResults {
