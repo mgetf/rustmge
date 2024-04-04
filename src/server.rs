@@ -49,8 +49,9 @@ impl Tournament {
             tc,
             players: vec![],
             arena_to_match: vec![None; NUM_ARENAS],
-            //arena_priority_order: vec![5, 6, 7, 1, 2, 3, 4, 8, 9, 10, 11, 12, 13, 14, 15, 16], //spire
-            arena_priority_order: vec![1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16], //blands mid
+            //arena_priority_order: vec![5, 6, 7, 1, 2, 3, 4, 8, 9, 10, 11, 12, 13, 14, 15, 16], //triump spire
+            //arena_priority_order: vec![1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16], //triumph blands mid
+            arena_priority_order: vec![5, 4, 9, 10, 2, 3, 9, 11, 12, 13, 14, 15, 16], // oighuv variety
         }
     }
 
