@@ -17,5 +17,6 @@ serde_json = "1.0.113"
 reqwest = { version = "0.11", features = ["json"] }
 rusqlite = { version = "0.31.0", features = ["bundled"] }
 valve-server-query = "0.4.9"
+timer = "0.2.0"
 
 

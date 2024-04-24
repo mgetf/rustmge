@@ -157,7 +157,7 @@ use actix_web::rt::task;
 use rusqlite::{Connection, Result};
 use valve_server_query::Server;
 
-pub async fn server_checkup() {
+pub fn server_checkup() {
     let conn = Connection::open("mge.db").unwrap();
     conn.execute(
         "CREATE TABLE IF NOT EXISTS servers (
@@ -265,13 +265,24 @@ pub async fn api_servers() -> impl Responder {
     HttpResponse::Ok().json(servers_ret)
 }
 
+use std::thread;
+
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
     let c = challonge::Challonge::new("tommylt3", crate::challonge::API_KEY);
     let tournament = Tournament::new(c).start();
 
-    server_checkup().await;
-
+    thread::spawn(move || {
+        let sys = actix::System::new();
+        sys.block_on(async {
+            let mut interval = actix::clock::interval(std::time::Duration::from_secs(60 * 5));
+            loop {
+                interval.tick().await;
+                println!("Checking servers!");
+                server_checkup();
+            }
+        });
+    });
     HttpServer::new(move || {
         App::new()
             .app_data(web::Data::new(AppState {

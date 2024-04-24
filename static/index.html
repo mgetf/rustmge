@@ -11,9 +11,13 @@
     <h1>mge.tf</h1>
     <div x-data="servers_req">
         <template x-if="data">
-            <ul>
+            <table>
                 <template x-for="server in data">
-                    <li x-text="server.name"></li>
+                    <tr x-data="server">
+                      <td x-text="players"></td>
+                      <td x-text="name"></td>
+                      <td><a :href="'steam://connect/' + ip">Connect</a></td>
+                    </tr>
                 </template>
             </ul>
         </template>
