@@ -144,6 +144,10 @@ async fn server_route(
     resp
 }
 
+async fn secret() -> impl Responder {
+    NamedFile::open_async("./static/admin.html").await.unwrap()
+}
+
 async fn index() -> impl Responder {
     NamedFile::open_async("./static/index.html").await.unwrap()
 }
@@ -231,7 +235,7 @@ async fn main() -> std::io::Result<()> {
                 tournment: tournament.clone(),
             }))
             .route("/tf2serverep", web::get().to(server_route))
-            .route("/secret", web::get().to(index))
+            .route("/secret", web::get().to(secret))
             .route("/", web::get().to(index))
     })
     .bind(("0.0.0.0", 8080))?
