@@ -12,6 +12,7 @@ use actix_web::{
 };
 use actix_web_actors::ws;
 use serde::{Deserialize, Serialize};
+use serde_json::json;
 mod challonge;
 mod server;
 
@@ -221,6 +222,49 @@ pub async fn server_checkup() {
     }
 }
 
+#[derive(Debug, Serialize)]
+struct ServerData {
+    ip: String,
+    time: u64,
+    name: String,
+    players: u32,
+}
+
+#[get("/api/servers")]
+pub async fn api_servers() -> impl Responder {
+    let conn = Connection::open("mge.db").unwrap();
+    let mut stmt = conn
+        .prepare("SELECT time FROM servers ORDER BY time DESC LIMIT 1")
+        .unwrap();
+    let mut most_recent_time: u64 = 0;
+    let server_iter = stmt.query_map([], |row| Ok(row.get(0)?));
+    for t in server_iter.unwrap() {
+        let t: Result<u64, _> = t;
+        most_recent_time = t.unwrap();
+    }
+
+    let mut stmt = conn
+        .prepare("SELECT ip, name, players FROM servers WHERE time = ?1")
+        .unwrap();
+    let servers = stmt
+        .query_map([most_recent_time], |row| {
+            Ok(ServerData {
+                ip: row.get(0)?,
+                time: most_recent_time,
+                name: row.get(1)?,
+                players: row.get(2)?,
+            })
+        })
+        .unwrap();
+
+    let mut servers_ret = vec![];
+    for server in servers {
+        servers_ret.push(server.unwrap());
+    }
+
+    HttpResponse::Ok().json(servers_ret)
+}
+
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
     let c = challonge::Challonge::new("tommylt3", crate::challonge::API_KEY);
@@ -237,6 +281,7 @@ async fn main() -> std::io::Result<()> {
             .route("/tf2serverep", web::get().to(server_route))
             .route("/secret", web::get().to(secret))
             .route("/", web::get().to(index))
+            .service(api_servers)
     })
     .bind(("0.0.0.0", 8080))?
     .run()

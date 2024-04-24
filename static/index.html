@@ -9,13 +9,39 @@
 
   <body>
     <h1>mge.tf</h1>
+    <div x-data="servers_req">
+        <template x-if="data">
+            <ul>
+                <template x-for="server in data">
+                    <li x-text="server.name"></li>
+                </template>
+            </ul>
+        </template>
+    </div>
+    </template>
+
     <script>
-      const loadData = async () => {
-        const response = await axios.get('/api/data');
-        console.log(response.data);
-      };
-      console.log('Hello, world!');
-      console.log(axios);
+    document.addEventListener('alpine:init', () => {
+        Alpine.data('servers_req', () => ({
+            loading: true,
+            data: null,
+            error: null,
+
+            init() { this.fetchDataFromServer(); },
+
+            async fetchDataFromServer() {
+                try {
+                    const response = await axios.get('/api/servers');
+                    this.data = response.data;
+                } catch (error) {
+                    this.error = 'Error fetching data';
+                    console.error(error);
+                } finally {
+                    this.loading = false;
+                }
+            }
+        }));
+    });
     </script>
   </body>
 </html>
