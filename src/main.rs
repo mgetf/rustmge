@@ -1,6 +1,9 @@
 extern crate challonge as challonge_api;
 
-use std::collections::{HashMap, HashSet};
+use std::{
+    collections::{HashMap, HashSet},
+    io::Read,
+};
 
 use actix::{Actor, AsyncContext, StreamHandler};
 use actix_files::{Files, NamedFile};
@@ -146,11 +149,81 @@ async fn index() -> impl Responder {
 }
 
 use actix_web::rt::task;
+use rusqlite::{Connection, Result};
+use valve_server_query::Server;
+
+pub async fn server_checkup() {
+    let conn = Connection::open("mge.db").unwrap();
+    conn.execute(
+        "CREATE TABLE IF NOT EXISTS servers (
+            ip TEXT NOT NULL,
+            time INT NOT NULL,
+            name TEXT NOT NULL,
+            players INT NOT NULL
+        )",
+        [],
+    )
+    .unwrap();
+    // query for players at current time: select 1, then select all with that time.
+    // query for all data: select all < timestamp, then sum in rust
+    conn.execute(
+        "CREATE TABLE IF NOT EXISTS aliases (
+            name TEXT NOT NULL,
+            ip TEXT NOT NULL,
+            time INT NOT NULL
+        )",
+        [],
+    )
+    .unwrap();
+    let mut file = std::fs::File::open("mgeserver.txt").unwrap();
+    let mut contents = String::new();
+    file.read_to_string(&mut contents).unwrap();
+    let lines: Vec<&str> = contents.split("\n").collect();
+    let server_ips = lines
+        .iter()
+        .map(|x| x.split("//").next().unwrap())
+        .map(|x| x.trim())
+        .collect::<Vec<&str>>();
+
+    let time: u64 = std::time::SystemTime::now()
+        .duration_since(std::time::UNIX_EPOCH)
+        .unwrap()
+        .as_secs();
+
+    for ip in server_ips {
+        let ip = ip.to_string();
+        let server = Server::new(&ip).expect("Connect to dedicated server running Valve game");
+        let info = server.info().expect("Get general server information");
+        let players = server.players().expect("Get general server information");
+
+        conn.execute(
+            "INSERT INTO servers (ip, time, name, players) VALUES (?1, ?2, ?3, ?4)",
+            &[
+                &ip,
+                &time.to_string(),
+                info.name(),
+                &info.player_count().to_string(),
+            ],
+        )
+        .unwrap();
+
+        for player in players {
+            conn.execute(
+                "INSERT INTO aliases (name, ip, time) VALUES (?1, ?2, ?3)",
+                &[&player.name(), ip.as_str(), &time.to_string()],
+            )
+            .unwrap();
+        }
+    }
+}
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
     let c = challonge::Challonge::new("tommylt3", crate::challonge::API_KEY);
     let tournament = Tournament::new(c).start();
+
+    server_checkup().await;
+
     HttpServer::new(move || {
         App::new()
             .app_data(web::Data::new(AppState {
@@ -158,6 +231,7 @@ async fn main() -> std::io::Result<()> {
                 tournment: tournament.clone(),
             }))
             .route("/tf2serverep", web::get().to(server_route))
+            .route("/secret", web::get().to(index))
             .route("/", web::get().to(index))
     })
     .bind(("0.0.0.0", 8080))?

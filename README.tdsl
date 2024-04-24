@@ -1,3 +1,13 @@
+start querying gameservers
+put into sqlite database
+sqlite database
+render html
+
+nginx reverse proxy + tls
+
+
+make open source (remove keys), so that the mgeservers.txt list can be pull requested
+make new tournament if existing one is finished
 overreporting matches
 
 finishing a match when tournament mode is disabled, is broken
