@@ -12,7 +12,6 @@ use actix_web::{
 };
 use actix_web_actors::ws;
 use serde::{Deserialize, Serialize};
-use serde_json::json;
 mod challonge;
 mod server;
 
@@ -197,27 +196,31 @@ pub fn server_checkup() {
 
     for ip in server_ips {
         let ip = ip.to_string();
-        let server = Server::new(&ip).expect("Connect to dedicated server running Valve game");
-        let info = server.info().expect("Get general server information");
-        let players = server.players().expect("Get general server information");
+        let server = Server::new(&ip);
+        if let Ok(server) = server {
+            let info = server.info();
+            let players = server.players();
 
-        conn.execute(
-            "INSERT INTO servers (ip, time, name, players) VALUES (?1, ?2, ?3, ?4)",
-            &[
-                &ip,
-                &time.to_string(),
-                info.name(),
-                &info.player_count().to_string(),
-            ],
-        )
-        .unwrap();
+            if let (Ok(info), Ok(players)) = (info, players) {
+                conn.execute(
+                    "INSERT INTO servers (ip, time, name, players) VALUES (?1, ?2, ?3, ?4)",
+                    &[
+                        &ip,
+                        &time.to_string(),
+                        info.name(),
+                        &info.player_count().to_string(),
+                    ],
+                )
+                .unwrap();
 
-        for player in players {
-            conn.execute(
-                "INSERT INTO aliases (name, ip, time) VALUES (?1, ?2, ?3)",
-                &[&player.name(), ip.as_str(), &time.to_string()],
-            )
-            .unwrap();
+                for player in players {
+                    conn.execute(
+                        "INSERT INTO aliases (name, ip, time) VALUES (?1, ?2, ?3)",
+                        &[&player.name(), ip.as_str(), &time.to_string()],
+                    )
+                    .unwrap();
+                }
+            }
         }
     }
 }
@@ -232,6 +235,41 @@ struct ServerData {
 
 #[get("/api/servers")]
 pub async fn api_servers() -> impl Responder {
+    let conn = Connection::open("mge.db").unwrap();
+    let mut stmt = conn
+        .prepare("SELECT time FROM servers ORDER BY time DESC LIMIT 1")
+        .unwrap();
+    let mut most_recent_time: u64 = 0;
+    let server_iter = stmt.query_map([], |row| Ok(row.get(0)?));
+    for t in server_iter.unwrap() {
+        let t: Result<u64, _> = t;
+        most_recent_time = t.unwrap();
+    }
+
+    let mut stmt = conn
+        .prepare("SELECT ip, name, players FROM servers WHERE time = ?1")
+        .unwrap();
+    let servers = stmt
+        .query_map([most_recent_time], |row| {
+            Ok(ServerData {
+                ip: row.get(0)?,
+                time: most_recent_time,
+                name: row.get(1)?,
+                players: row.get(2)?,
+            })
+        })
+        .unwrap();
+
+    let mut servers_ret = vec![];
+    for server in servers {
+        servers_ret.push(server.unwrap());
+    }
+
+    HttpResponse::Ok().json(servers_ret)
+}
+
+#[get("/api/players")]
+pub async fn api_players() -> impl Responder {
     let conn = Connection::open("mge.db").unwrap();
     let mut stmt = conn
         .prepare("SELECT time FROM servers ORDER BY time DESC LIMIT 1")
@@ -293,6 +331,7 @@ async fn main() -> std::io::Result<()> {
             .route("/secret", web::get().to(secret))
             .route("/", web::get().to(index))
             .service(api_servers)
+            .service(api_players)
     })
     .bind(("0.0.0.0", 8080))?
     .run()

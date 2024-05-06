@@ -34,10 +34,13 @@ pub fn get_open_arena(
 }
 
 use challonge::{matches::Player, Challonge};
+use challonge_api::{TournamentState, TournamentType};
+use chrono::Local;
 
 impl Tournament {
     pub fn new(c: Challonge) -> Self {
         let tid = challonge::TournamentId::Url(SUBDOMAIN.to_string(), "mge5".to_string());
+        println!("getting tournament {:?}", tid);
         let tc = c
             .get_tournament(&tid, &challonge::TournamentIncludes::All)
             .unwrap();

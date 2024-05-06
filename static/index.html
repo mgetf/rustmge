@@ -22,6 +22,11 @@
             </ul>
         </template>
     </div>
+    <div x-data="players_req">
+        <template x-if="data">
+            tracking x players
+        </template>
+    </div>
     </template>
 
     <script>
@@ -36,6 +41,25 @@
             async fetchDataFromServer() {
                 try {
                     const response = await axios.get('/api/servers');
+                    this.data = response.data;
+                } catch (error) {
+                    this.error = 'Error fetching data';
+                    console.error(error);
+                } finally {
+                    this.loading = false;
+                }
+            }
+        }));
+        Alpine.data('players_req', () => ({
+            loading: true,
+            data: null,
+            error: null,
+
+            init() { this.fetchDataFromServer(); },
+
+            async fetchDataFromServer() {
+                try {
+                    const response = await axios.get('/api/players');
                     this.data = response.data;
                 } catch (error) {
                     this.error = 'Error fetching data';
