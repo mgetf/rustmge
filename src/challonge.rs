@@ -14,7 +14,6 @@ use challonge::{
 use chrono::*;
 
 pub const SUBDOMAIN: &str = "89c2a59aadab1761b8e29117";
-pub const API_KEY: &str = "TUCP3PRoh8aJdYj1Pw5WNT0CJ3kVzCySwaztzM35";
 
 pub fn create_tournament(c: &Challonge, url: String, title: String) -> challonge::Tournament {
     let tc = TournamentCreate {
@@ -46,7 +45,8 @@ pub fn create_tournament(c: &Challonge, url: String, title: String) -> challonge
 
 pub fn add_participant(tc: &Tournament, name: &String, steamid: &String) {
     let mut mp = std::collections::HashMap::new();
-    mp.insert("api_key", json!(crate::challonge::API_KEY));
+    let api_key = std::fs::read_to_string("api_key.txt").unwrap();
+    mp.insert("api_key", json!(api_key.trim()));
     mp.insert(
         "participant",
         json!({"name": name, 
@@ -69,7 +69,8 @@ pub fn add_participant(tc: &Tournament, name: &String, steamid: &String) {
 
 pub fn start_tournament(tc: &Tournament) {
     let mut mp = std::collections::HashMap::new();
-    mp.insert("api_key", crate::challonge::API_KEY);
+    let api_key = std::fs::read_to_string("api_key.txt").unwrap();
+    mp.insert("api_key", api_key.trim());
     let client = reqwest::blocking::Client::new();
     let put = client
         .post(&format!(
@@ -88,7 +89,9 @@ pub fn update_match(tc: &Tournament, m: &Match, winner: &u64, scoreline: &str) {
     matches.insert("scores_csv", json!(scoreline));
     matches.insert("winner_id", json!(winner));
 
-    mp.insert("api_key", json!(crate::challonge::API_KEY));
+    let api_key = std::fs::read_to_string("api_key.txt").unwrap();
+
+    mp.insert("api_key", json!(api_key.trim()));
     mp.insert("match", json!(matches));
 
     let client = reqwest::blocking::Client::new();
@@ -180,7 +183,8 @@ pub fn pending_matches(
 }
 
 pub fn main() {
-    let c = Challonge::new("tommylt3", "TUCP3PRoh8aJdYj1Pw5WNT0CJ3kVzCySwaztzM35");
+    let api_key = std::fs::read_to_string("api_key.txt").unwrap();
+    let c = Challonge::new("tommylt3", api_key.trim());
     let cmd = std::env::args().nth(1).unwrap_or("debug".to_string());
 
     //delete_test_tournaments(&c);
@@ -245,8 +249,9 @@ pub fn get_matches(tid: &challonge_api::TournamentId) -> Vec<Match> {
     .unwrap();
 
     {
+        let api_key = std::fs::read_to_string("api_key.txt").unwrap();
         let mut pairs = url.query_pairs_mut();
-        pairs.append_pair("api_key", crate::challonge::API_KEY);
+        pairs.append_pair("api_key", &api_key.trim());
         pairs.append_pair("state", "all");
     }
 
