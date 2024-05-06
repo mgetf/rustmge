@@ -14,7 +14,7 @@ use challonge::{
 use chrono::*;
 
 pub const SUBDOMAIN: &str = "89c2a59aadab1761b8e29117";
-pub const API_KEY: &str = "TUCP3PRoh8aJdYj1Pw5WNT0CJ3kVzCySwaztzM35";
+pub const API_KEY: &str = "";
 
 pub fn create_tournament(c: &Challonge, url: String, title: String) -> challonge::Tournament {
     let tc = TournamentCreate {
