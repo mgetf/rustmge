@@ -44,14 +44,12 @@ pub fn create_tournament(c: &Challonge, url: String, title: String) -> challonge
     c.create_tournament(&tc).unwrap()
 }
 
-pub fn add_participant(tc: &Tournament, name: &String, steamid: &String) {
+pub fn add_participant(tc: &Tournament, name: &String, steamid: &String, seed: i32) {
     let mut mp = std::collections::HashMap::new();
     mp.insert("api_key", json!(crate::challonge::API_KEY));
     mp.insert(
         "participant",
-        json!({"name": name, 
-                  "seed": 1,
-                  "misc": steamid}),
+        json!({"name": name, "seed": seed, "misc": steamid}),
     );
 
     let client = reqwest::blocking::Client::new();

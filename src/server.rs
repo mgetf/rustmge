@@ -1,5 +1,4 @@
 use std::collections::HashSet;
-
 use crate::{challonge::SUBDOMAIN, ForwardMessage, ServerWs};
 use actix::prelude::*;
 
@@ -33,11 +32,12 @@ pub fn get_open_arena(
     None
 }
 
+use actix_web_actors::ws::Message;
 use challonge::{matches::Player, Challonge};
 
 impl Tournament {
-    pub fn new(c: Challonge) -> Self {
-        let tid = challonge::TournamentId::Url(SUBDOMAIN.to_string(), "mge5".to_string());
+    pub fn new(c: Challonge, name: String) -> Self {
+        let tid = challonge::TournamentId::Url(SUBDOMAIN.to_string(), name.to_string());
         let tc = c
             .get_tournament(&tid, &challonge::TournamentIncludes::All)
             .unwrap();
@@ -49,8 +49,8 @@ impl Tournament {
             tc,
             players: vec![],
             arena_to_match: vec![None; NUM_ARENAS],
-            //arena_priority_order: vec![5, 6, 7, 1, 2, 3, 4, 8, 9, 10, 11, 12, 13, 14, 15, 16], //spire
-            arena_priority_order: vec![1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16], //blands mid
+            arena_priority_order: vec![5, 6, 7, 1, 2, 3, 4, 8, 9, 10, 11, 12, 13, 14, 15, 16], //spire
+            //arena_priority_order: vec![1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16], //blands mid
         }
     }
 
@@ -149,6 +149,8 @@ impl Handler<ForwardMessage> for Tournament {
                 p1Score,
                 p2Score,
             } => {
+                println!("recieved match score {:?}", arenaId);
+                println!("servers {:?}", self.servers);
                 for server in &self.servers {
                     server.do_send(ForwardMessage {
                         message: MessagePayload::SetMatchScore {
@@ -197,11 +199,17 @@ impl Handler<ForwardMessage> for Tournament {
             }
             MessagePayload::MatchBegan { p1Id, p2Id } => {}
             MessagePayload::UsersInServer { players } => {
-                println!("recieved players {:?}", players);
                 self.players = players;
+                self.players.sort_by(|a, b| a.elo.cmp(&b.elo));
+                self.players.reverse();
+                println!("recieved players {:?}", self.players);
+
+                let mut seed = 0;
+
                 for player in &self.players {
+                    seed += 1;
                     println!("adding player {:?}", player.name);
-                    crate::challonge::add_participant(&self.tc, &player.name, &player.steamId);
+                    crate::challonge::add_participant(&self.tc, &player.name, &player.steamId, seed);
                 }
 
                 crate::challonge::start_tournament(&self.tc);
@@ -209,6 +217,9 @@ impl Handler<ForwardMessage> for Tournament {
             }
             MessagePayload::Error { message } => {
                 println!("recieved error {:?}", message);
+            }
+            MessagePayload::ScoreNotification { arena, p1Score, p2Score } => {
+                println!("recieved score notifiation on arena {:?}, p1Score {:?}, p2Score {:?}", arena, p1Score, p2Score);
             }
         }
     }

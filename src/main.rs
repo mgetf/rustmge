@@ -16,6 +16,7 @@ mod server;
 struct Player {
     steamId: String,
     name: String,
+    elo: i32,
 }
 
 #[derive(Debug, Deserialize, Serialize)]
@@ -60,6 +61,11 @@ enum MessagePayload {
     },
     SetMatchScore {
         arenaId: i32,
+        p1Score: i32,
+        p2Score: i32,
+    },
+    ScoreNotification {
+        arena: i32,
         p1Score: i32,
         p2Score: i32,
     },
@@ -149,8 +155,14 @@ use actix_web::rt::task;
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
+    // get first arg from cli
+    let mut args = std::env::args();
+    let _ = args.next();
+    let name = args.next().expect("tournament url arg required");
+    println!("Tournament url: {}", name);
+
     let c = challonge::Challonge::new("tommylt3", crate::challonge::API_KEY);
-    let tournament = Tournament::new(c).start();
+    let tournament = Tournament::new(c, name).start();
     HttpServer::new(move || {
         App::new()
             .app_data(web::Data::new(AppState {
