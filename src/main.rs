@@ -147,6 +147,10 @@ async fn server_route(
     resp
 }
 
+async fn admin() -> impl Responder {
+    NamedFile::open_async("./static/admin.html").await.unwrap()
+}
+
 async fn index() -> impl Responder {
     NamedFile::open_async("./static/index.html").await.unwrap()
 }
@@ -161,8 +165,11 @@ async fn main() -> std::io::Result<()> {
     let name = args.next().expect("tournament url arg required");
     println!("Tournament url: {}", name);
 
-    let c = challonge::Challonge::new("tommylt3", crate::challonge::API_KEY);
+    // read api_key.txt
+    let api_key = std::fs::read_to_string("api_key.txt").unwrap();
+    let c = challonge::Challonge::new("tommylt3", &api_key.trim());
     let tournament = Tournament::new(c, name).start();
+
     HttpServer::new(move || {
         App::new()
             .app_data(web::Data::new(AppState {
@@ -170,6 +177,7 @@ async fn main() -> std::io::Result<()> {
                 tournment: tournament.clone(),
             }))
             .route("/tf2serverep", web::get().to(server_route))
+            .route("/admin", web::get().to(admin))
             .route("/", web::get().to(index))
     })
     .bind(("0.0.0.0", 8080))?

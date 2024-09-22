@@ -1,0 +1,66 @@
+server!!! Ok(HttpResponse { error: None, res:
+Response HTTP/1.1 101 Switching Protocols
+  headers:
+    "sec-websocket-accept": "XEgbWMMo1y4Z4nR6XeWopOFXIzI="
+    "upgrade": "websocket"
+  body: Stream
+ })
+Text received: {"type": "ServerHello", "payload": {"apiKey": "", "serverNum": "1", "serverHost": "", "serverPort": "27015", "stvPort": ""}}
+server!!! Ok(HttpResponse { error: None, res:
+Response HTTP/1.1 101 Switching Protocols
+  headers:
+    "sec-websocket-accept": "qtith+l5NedvMccDvpHVN0MS0j8="
+    "upgrade": "websocket"
+  body: Stream
+ })
+Text received: {"type":"TournamentStart","payload":{}}
+Forwarding message: TournamentStart
+Text received: {"type": "UsersInServer", "payload": {"players": [{"steamId": "76561198041183975", "name": "awesom"}, {"steamId": "76561198044192979", "name": "dolphin rider"}, {"steamId": "76561198082657536", "name": "Neptune"}]}}
+recieved players [Player { steamId: "76561198041183975", name: "awesom" }, Player { steamId: "76561198044192979", name: "dolphin rider" }, Player { steamId: "76561198082657536", name: "Neptune" }]
+adding player "awesom"
+Response { url: Url { scheme: "https", cannot_be_a_base: false, username: "", password: None, host: Some(Domain("api.challonge.com")), port: None, path: "/v1/tournaments/14515205/participants.json", query: None, fragment: None }, status: 200, headers: {"date": "Tue, 07 May 2024 23:05:25 GMT", "content-type": "application/json; charset=utf-8", "transfer-encoding": "chunked", "connection": "keep-alive", "status": "200 OK", "x-frame-options": "SAMEORIGIN", "x-xss-protection": "1; mode=block", "x-content-type-options": "nosniff", "p3p": "CP=\"NOI ADM DEV PSAi COM NAV OUR OTRo STP IND DEM\"", "etag": "W/\"6b5b6b6c14fadce3262baeec1f5d02da\"", "set-cookie": "refresh_token=aFVEd1BzK3ptcnMvTWFXUjRmeVd6bnYwQStmSDEzaWl1UVZQbTcyTjJJUWJKZGQ5OFRaaytLWlZ3emhOQXNFcXZVRy9JZldTNVJ0UmxVWkpSbk4reFNyd2JqZm1LTkFma1c0ZmlhaEpGK0dyOUF3Z3NNSm9IVDV1Q1U4WFExVDJkdEdNVnRRSEtLYzY3c3UwRDBvaU9Yd01OK3pOblFZdXYrZGY5eDlSb3M2M1BwYWtYWlk2UVRKVEVSQXhnSWM5a21uenpEV2Vsd1ZVaWpxQVFIR1RBWHFWempreUdSbkxKcEV1V0tqQ3BkcTB3ZlJWTUMzaERRTVkvUmNlMy9WTlpJZm05bTFHa0tXZUZVUWJnS0Vic0g2Tk50VWd4c1VFODE5MzRZa3FNK21nVnNxeUw0c3JkbTZNUkUrNHN3ZlQtLVloVUZXbDJYY1RNTWVDdVBYMzlOK3c9PQ%3D%3D--ff55866a072d73c72f018f2803d53fb42c42fb63; path=/; expires=Tue, 07 May 2024 20:46:41 -0000; secure; HttpOnly", "set-cookie": "_ck=true; domain=.challonge.com; path=/; expires=Fri, 07 Jun 2024 23:05:25 -0000", "set-cookie": "__cf_bm=whVimvBr3X9y5n3kPYs3flywkk0lNyaGjFvPlXfmk7M-1715123125-1.0.1.1-sQT8PCYneiypvxMs.BAFMZ3xFeMAFAUvIi782TcE5y5ntiSifxItxr__oED4tUtPJwKzIoDM_cJsFY94RgpfFg; path=/; expires=Tue, 07-May-24 23:35:25 GMT; domain=.challonge.com; HttpOnly; Secure", "x-request-id": "764c8a4c-1024-4b13-8035-59c7df6574e9", "x-runtime": "0.088043", "cache-control": "private, max-age=0, no-store, must-revalidate", "pragma": "no-cache", "x-cache": "MISS", "accept-ranges": "bytes", "strict-transport-security": "max-age=31536000; includeSubDomains", "cf-cache-status": "DYNAMIC", "server": "cloudflare", "cf-ray": "8804dacbcf4e290d-ORD"} }
+adding player "dolphin rider"
+Response { url: Url { scheme: "https", cannot_be_a_base: false, username: "", password: None, host: Some(Domain("api.challonge.com")), port: None, path: "/v1/tournaments/14515205/participants.json", query: None, fragment: None }, status: 200, headers: {"date": "Tue, 07 May 2024 23:05:25 GMT", "content-type": "application/json; charset=utf-8", "content-length": "1014", "connection": "keep-alive", "status": "200 OK", "x-frame-options": "SAMEORIGIN", "x-xss-protection": "1; mode=block", "x-content-type-options": "nosniff", "p3p": "CP=\"NOI ADM DEV PSAi COM NAV OUR OTRo STP IND DEM\"", "etag": "W/\"4200b97b6a1523439dafe671b8240d7f\"", "set-cookie": "refresh_token=MDhzUlEreCtNNytITXRPZkdyOFlnR0JwbHRQZk9OQVpHSll1bEZKS3dMdVBYNHAzUXJrbUszUmh4a3NLMnFBVjVOeWZyWnBKeEl5NjVOMGJyUGRQek9JVXVNMHdSYWFLMFdrZ1JLZ1VvcGFSaU1xa0RSYytkSmNtWGJxMy9IZmRjTk1NaEc4TTU3SkJTekhDMHFObGZ3VGFRM2dQS0JMWFhPRThEQTRPRVZjbjR0K2RjTjFMb3ZvcjI2RDdMSjdRSGIzMVlVQ25LaUlvWDM0KzRvTG45YWt2REhBdnhCU1kydDVTTzZ3UUJ5M09OT3hBVDU2dzlsYnNwd0dSd21qR3kyK2JQZkVwbmROclMrd2t0ZnVPQWxpWUVqdnRGcjFMZW42VmFSdFZRWEJML3k1ZHVpZDNqeEg5MDk4bytQcDktLVpyMnBnalJDeWlVUThvdXBYcFJJR2c9PQ%3D%3D--9b176afa4281e40bc323987d312dbd06bebbd1bd; path=/; expires=Tue, 07 May 2024 20:56:47 -0000; secure; HttpOnly", "set-cookie": "_ck=true; domain=.challonge.com; path=/; expires=Fri, 07 Jun 2024 23:05:25 -0000", "set-cookie": "__cf_bm=5a5gRyiDzDPmmO04I7e1c8yb1tsXPJXHp7HGlFq4RFM-1715123125-1.0.1.1-353wtYHESfHMzuXlDNa5kMoZFLWYkXNI398FIyboSTfjoDrtU_wOgCD.BOpIWIrr1m5UXY0mSct9HAlbMQqX0g; path=/; expires=Tue, 07-May-24 23:35:25 GMT; domain=.challonge.com; HttpOnly; Secure", "x-request-id": "2f83c327-c9aa-49fd-b76c-1da9d74c9f0f", "x-runtime": "0.085143", "cache-control": "private, max-age=0, no-store, must-revalidate", "pragma": "no-cache", "x-cache": "MISS", "accept-ranges": "bytes", "strict-transport-security": "max-age=31536000; includeSubDomains", "cf-cache-status": "DYNAMIC", "server": "cloudflare", "cf-ray": "8804daccdfe89120-ORD"} }
+adding player "Neptune"
+Response { url: Url { scheme: "https", cannot_be_a_base: false, username: "", password: None, host: Some(Domain("api.challonge.com")), port: None, path: "/v1/tournaments/14515205/participants.json", query: None, fragment: None }, status: 200, headers: {"date": "Tue, 07 May 2024 23:05:25 GMT", "content-type": "application/json; charset=utf-8", "transfer-encoding": "chunked", "connection": "keep-alive", "status": "200 OK", "x-frame-options": "SAMEORIGIN", "x-xss-protection": "1; mode=block", "x-content-type-options": "nosniff", "p3p": "CP=\"NOI ADM DEV PSAi COM NAV OUR OTRo STP IND DEM\"", "etag": "W/\"c35eb64be284956d2b2f6119f53571f2\"", "set-cookie": "refresh_token=bmg1SzMvSWlReHZHZVZZNkNTaUcyeEY0eEhvMm0xSFYwbmM3NmZOazlJZXkycndpYmw2elpsTFZ3TEl4RVJPU2wwek1mUEVYUlIwYlplOVJIYzdrejY5SkpXek5Xd2hwMVk2RWZEZGs2UXU3NWV4TnlKZjFBNjExRVdRSmltSVdFazg0YnYyRG5MMkYrWEp6d0ZVS29WcmhOeUpSNWY3MjIrRHBhQmhWWG5jNUZJQlloKzFibGl3cXFiay82QTB4aFhWVWZkY0ZiQ3pHZmxQWGFQdFlEa21uTCtsbThZSE9sN1lWOWR1ZW9kbkdEbzNHMDRBUE0xU1J3L3pUN2JtNEEwZktOaHAvUHdIbjFSZjA2NWNTZGpGa2lWOVFoa0hnY1hPbGhYS2NXNzY3ZjcweTBkZmttNC9abElaNkRWTDgtLUNFWERBSkp4V0tRSG40eWtNUnlZbkE9PQ%3D%3D--4b19ae7d1e5410ae842e197d824ecf339a23139d; path=/; expires=Tue, 07 May 2024 20:53:50 -0000; secure; HttpOnly", "set-cookie": "_ck=true; domain=.challonge.com; path=/; expires=Fri, 07 Jun 2024 23:05:25 -0000", "set-cookie": "__cf_bm=oox5yfd60dapNPDJfHtbsW2b64yxDefRSJwFuEkryFU-1715123125-1.0.1.1-zQGnzAIs5XaPecV._MfbduRO7bzz4N3Jn1V7JbSD1RNombO2DXo4MRqacwWb4VmbBH3AJNAvSZDjc5MnU5jflw; path=/; expires=Tue, 07-May-24 23:35:25 GMT; domain=.challonge.com; HttpOnly; Secure", "x-request-id": "244cb8e3-04ca-44b5-9fb7-51e7e2ffbf73", "x-runtime": "0.158338", "cache-control": "private, max-age=0, no-store, must-revalidate", "pragma": "no-cache", "x-cache": "MISS", "accept-ranges": "bytes", "strict-transport-security": "max-age=31536000; includeSubDomains", "cf-cache-status": "DYNAMIC", "server": "cloudflare", "cf-ray": "8804dacdeb7a027b-ORD"} }
+arenas [None, Some({"76561198044192979", "76561198041183975"}), None, None, None, None, None, None, None, None, None, None, None, None, None, None]
+Forwarding message: MatchDetails { arenaId: 1, p1Id: "76561198044192979", p2Id: "76561198041183975" }
+Text received: {"type": "MatchBegan", "payload": {"p1": "76561198044192979", "p2": "76561198041183975"}}
+recieved error "missing field `p1Id` at line 1 column 88"
+
+
+Text received: {"type": "MatchResults", "payload": {"winner": "76561198041183975", "loser": "76561198044192979", "finished": true, "arena": 1}}
+checking match between dolphin rider and awesom
+reporting match between dolphin rider and awesom
+reporting match
+arenas [None, Some({"76561198041183975", "76561198082657536"}), None, None, None, None, None, None, None, None, None, None, None, None, None, None]
+Forwarding message: MatchDetails { arenaId: 1, p1Id: "76561198082657536", p2Id: "76561198041183975" }
+Text received: {"type": "MatchBegan", "payload": {"p1": "76561198082657536", "p2": "76561198041183975"}}
+recieved error "missing field `p1Id` at line 1 column 88"
+Text received: {"type": "MatchResults", "payload": {"winner": "76561198041183975", "loser": "76561198082657536", "finished": true, "arena": 1}}
+checking match between Neptune and awesom
+reporting match between Neptune and awesom
+reporting match
+arenas [None, Some({"76561198044192979", "76561198082657536"}), None, None, None, None, None, None, None, None, None, None, None, None, None, None]
+Forwarding message: MatchDetails { arenaId: 1, p1Id: "76561198082657536", p2Id: "76561198044192979" }
+Text received: {"type": "MatchBegan", "payload": {"p1": "76561198082657536", "p2": "76561198044192979"}}
+recieved error "missing field `p1Id` at line 1 column 88"
+Text received: {"type": "MatchResults", "payload": {"winner": "76561198082657536", "loser": "76561198044192979", "finished": true, "arena": 1}}
+checking match between Neptune and dolphin rider
+reporting match between Neptune and dolphin rider
+reporting match
+arenas [None, Some({"76561198082657536", "76561198041183975"}), None, None, None, None, None, None, None, None, None, None, None, None, None, None]
+Forwarding message: MatchDetails { arenaId: 1, p1Id: "76561198041183975", p2Id: "76561198082657536" }
+Text received: {"type": "MatchBegan", "payload": {"p1": "76561198041183975", "p2": "76561198082657536"}}
+recieved error "missing field `p1Id` at line 1 column 88"
+Text received: {"type": "MatchResults", "payload": {"winner": "76561198082657536", "loser": "76561198041183975", "finished": true, "arena": 1}}
+checking match between awesom and Neptune
+reporting match between awesom and Neptune
+reporting match
+arenas [None, Some({"76561198082657536", "76561198041183975"}), None, None, None, None, None, None, None, None, None, None, None, None, None, None]
+Forwarding message: MatchDetails { arenaId: 1, p1Id: "76561198082657536", p2Id: "76561198041183975" }
+Text received: {"type": "MatchBegan", "payload": {"p1": "76561198082657536", "p2": "76561198041183975"}}
+recieved error "missing field `p1Id` at line 1 column 88"
+
+
+
